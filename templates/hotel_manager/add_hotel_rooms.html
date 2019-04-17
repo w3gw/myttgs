@@ -1,0 +1,38 @@
+{% extends 'hotel_manager/layout.html'%}
+
+{% block content%}
+<div id="content">
+    <header>
+        <h2 class="page-title">Add New Rooms To {{g.user.hotel.hotel_name}} Hotel</h2>
+    </header>
+    <div class="content-inner">
+        <div class="form-wrapper">   
+     {% from "./includes/_formhelpers.html" import render_field, render_select_field %}
+            <form action="" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="text" name="room_num" class="form-control" placeholder="Rooom Number" required>
+                </div>
+                <div class="form-group">
+                    <input type="number" name="beds" class="form-control" placeholder="Number of Beds" required>
+                </div>
+                <div class="form-group">
+                    <input type="number" name="price" class="form-control" placeholder="price per Night" required>
+                </div>
+                <div class="form-group">
+                    <label>avalilable on</label>
+                    <input type="date" name="av_at" class="form-control" required placeholder="available on" required>
+                </div>
+                <div class="clearfix">
+
+                </div>
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary pull-right">
+                    Save 
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock%}

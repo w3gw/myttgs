@@ -1,0 +1,79 @@
+{% extends 'admin/layout.html' %}
+
+<!-- css and js links -->
+{% block links %}
+<link rel="stylesheet" href="../static/css/new-articles.css">
+{% endblock %}
+<!-- side menu bar active -->
+{% block tourguides %}
+<li class="link active">
+    <a href="/admin/tourguides">
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        <span class="hidden-xs hidden-sm">Tour Guides</span>
+    </a>
+</li>
+{% endblock %}
+<!-- add new package content -->
+{% block content %}
+<div id="content">
+    <header>
+        <h2 class="page-title">Register New Tour Guides</h2>
+    </header>
+    <div class="content-inner">
+        <div class="form-wrapper">
+                {% from "./includes/_formhelpers.html" import render_field, render_select_field %}
+            <form action="{{url_for('addtourguide')}}" method="POST" enctype="multipart/form-data">
+                <!-- firstname -->
+                <div class="form-group">
+                    <label class="sr-only">first name</label>
+                    <input type="text" name="firstname" class="form-control" placeholder="first name" required="true" >
+                </div>
+                 <!--last name  -->
+                 <div class="form-group">
+                    <label class="sr-only">last name</label>
+                    <input type="text" name="lastname" class="form-control" placeholder="last name" required="true">
+                </div>
+                <!-- email -->
+                <div class="form-group">
+                    <label class="sr-only">email</label>
+                    <input type="email" name="email" class="form-control" placeholder="e-mail" required="true">
+                </div>
+                <!-- phone -->
+                <div class="form-group">
+                    <label class="sr-only">phone</label>
+                    <input type="phone" name="phone" class="form-control" placeholder="phone" required="true">
+                </div>
+                <!-- address -->
+                <div class="form-group">
+                    <label class="sr-only">address</label>
+                    <input type="text" name="address" class="form-control" placeholder="address" required="true">
+                </div>
+                <!-- age -->
+                <div class="form-group">
+                    <label class="sr-only">age</label>
+                    <input type="number" name="age" min="18" max="50" class="form-control" placeholder="age" required="true">
+                </div>
+                <!-- gender -->
+                <div class="form-group">
+                <label class="">gender</label>
+                        <select data-placeholder="Select gender" class="form-control chosen-select"  name="gender">
+                            <option value="male">male</option>
+                            <option value="female">female</option>
+                        </select>
+                 </div> 
+                 <div class="form-group">
+                    <label class="sr-only">Salary</label>
+                    <input type="text" name="salary" class="form-control" placeholder="TourGuide Salary">
+                 </div>
+                 <div class="form-group">
+                    <label>Select Tour guides picture</label>
+                    <input type="file" name="file" class="form-control" placeholder="select jpg Image" > 
+                </div>
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary pull-right">Save Tour Guide</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

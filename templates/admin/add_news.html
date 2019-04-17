@@ -1,0 +1,52 @@
+{% extends 'admin/layout.html' %}
+
+<!-- css and js links -->
+{% block links %}
+<link rel="stylesheet" href="../static/css/new-articles.css">
+{% endblock %}
+<!-- side bar menu active-->
+{% block news %}
+<li class="link active">
+    <a href="/admin/news" >
+        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+        <span class="hidden-xs hidden-sm">News</span>
+    </a>
+</li>
+{% endblock %}
+<!--  -->
+
+{% block content %}
+<div id="content">
+    <header>
+        <h2 class="page-title">Create New article</h2>
+    </header>
+    <div class="content-inner">
+        <div class="form-wrapper">
+        {% from "./includes/_formhelpers.html" import render_field, render_select_field %}
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <!-- title -->
+                {{ render_field(form.news_title, placeholder=form.news_title.label.text)}}
+                <!-- tags -->
+                {{ render_select_field(form.news_tag, placeholder=form.news_tag.label.text,
+                   class_="form-control chosen-select "
+                ) }}
+                {{ render_field(form.article, placeholder=form.article.label.text, id="article")}}
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> publish article when I click on save
+                    </label>
+                </div>
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary pull-right">Save / Publish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    CKEDITOR.replace('article');
+</script>
+{% endblock %}

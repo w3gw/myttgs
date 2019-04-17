@@ -1,0 +1,196 @@
+{% extends 'admin/layout.html' %}
+<!-- css and js links -->
+{% block links %}
+<link rel="stylesheet" href="../static/css/articles.css">
+{% endblock %}
+<!-- sidebar menu active -->
+{% block tourguides %}
+<li class="link active">
+    <a href="/admin/tourguides">
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        <span class="hidden-xs hidden-sm">Tour Guides</span>
+    </a>
+</li>
+{% endblock %}
+<!-- main content -->
+{% block content %}
+<div id="content">
+    <header class="clearfix">
+        <h2 class="page-title pull-left">Registered Tour guides</h2>
+        <a href="/admin/add_new_tourguide" class="pull-right btn-xs btn btn-primary">New tour guide</a>
+    </header>
+    <div class="content-inner">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg12">
+                <table class="table table-striped table-bordered table-hover ">
+                    <thead>
+                        <tr class="success">
+                            <th>#</th>
+                            <th> Full Name</th>
+                            <th>E-mail</th>
+                            <th>Phone number</th>
+                            <th>Address</th>
+                            <th>Age</th>
+                            <th>Languages</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for tg in tourguides  %}
+                        <tr>
+                            <td>
+                                <button type="button" data-toggle="modal" data-target="#{{tg.id}}viewimage" 
+                                        class="btn btn-default">
+                                            {{tg.id}}
+                                </button>
+                                <div id="{{tg.id}}viewimage" class="modal fade" role="dialog">
+                                  <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      </div>
+                                      <div class="modal-body">
+                                           <img width="20%" height="30%"  src="../static/images/tourguides/{{tg.first_name}}.jpg">
+                                           <h5> {{tg.first_name}} {{tg.last_name}}</h5>    
+                                           <h5>
+                                               {tg.salary}
+                                           </h5>                                
+                                        </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span>{{tg.first_name}} {{tg.last_name}}</span>
+                             </td>
+                            <td>{{tg.email}}</td>
+                            <td>{{tg.phone}}</td>
+                            <td>{{tg.address}}</td>
+                            <td>{{tg.age}}</td>
+                            <td>{{tg.skill.skill_name }}</td>
+                            <td>
+                                <a href="{{url_for('delete',id=tg.id, db_urls='TourGuide',name=tg.first_name)}}" class="btn btn-xs btn-danger ">
+                                    <label class="hidden-xs"> Delete</label>
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+                                 <a href="#{{tg.id}}edit" data-toggle="modal" class="btn btn-xs btn-warning ">
+                                    <label class="hidden-xs"> Edit</label>
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                                <a href="#{{tg.id}}more" data-toggle="modal" class="btn btn-xs btn-info">
+                                    <label class="hiden-xs">More</label>
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+                            </td>
+                        </tr>
+
+                        <div id="{{tg.id}}edit" class="modal fade" role="dialog">
+                              <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <h5>Edit {{tg.first_name}} {{tg.last_name}}'s information </h5>
+                                    <form action="{{url_for('tourguides')}}" method="POST" 
+                                            enctype="  multipart/form-data">
+                                        <!-- firstname -->
+                                        <input type="hidden" name="id" value="{{tg.id}}">
+                                        <div class="form-group">
+                                            <label>First Name</label>
+                                            <input type="text" value="{{tg.first_name}}" name="firstname" class="form-control"  required >
+                                        </div>
+                                         <!--last name  -->
+                                         <div class="form-group">
+                                            <label>Last Name</label>
+                                            <input type="text" value="{{tg.last_name}}" name="lastname" class="form-control" required="true">
+                                        </div>
+                                        <!-- email -->
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" value="{{tg.email}}" name="email" class="form-control" required="true">
+                                        </div>
+                                        <!-- phone -->
+                                        <div class="form-group">
+                                            <label>Phone Number</label>
+                                            <input type="tel" value="{{tg.phone}}" name="phone" class="form-control" required="true">
+                                        </div>
+                                        <!-- address -->
+                                        <div class="form-group">
+                                            <label>Address</label>
+                                            <input type="text" value="{{tg.address}}" name="address" class="form-control" required="true">
+                                        </div>
+                                        <!-- age -->
+                                        <div class="form-group">
+                                            <label>Age</label>
+                                            <input type="number" value="{{tg.age}}" name="age" min="18" max="50" class="form-control"  required="true">
+                                        </div>
+                                        <!-- gender -->
+                                        <div class="form-group">
+                                        <label class="">gender</label>
+                                            <select data-placeholder="Select gender" class="form-control"  name="gender">
+                                                <option value="male">male</option>
+                                                <option value="female">female</option>
+                                            </select>
+                                         </div> 
+                                                    <!-- skills -->
+                                        <div class="form-group">
+                                        <label class="">Skills</label>
+                                                <select data-placeholder="Select Skills" class="form-control "  name="skills" >
+                                                    {% for skill in skills %}
+                                                    <option value="{{ skill.id}}" >{{skill.skill_name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                         </div>   
+                                         <!-- places -->
+                                         <div class="form-group">
+                                        <label class="">Close Destination</label>
+                                                <select data-placeholder="Select Places" class="form-control" name="places">
+                                                    {% for place in places %}
+                                                    <option value="{{ place.id}}" >{{place.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                         </div>   
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary form-control ">Finish Update</button>
+                                        </div>
+                                    </form>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                        </div>     
+                                           <!--  -->
+                        <div id="{{tg.id}}more" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                               
+                                     
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

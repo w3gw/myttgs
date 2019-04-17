@@ -1,0 +1,76 @@
+{% extends 'admin/layout.html' %}
+<!-- side bar menu active -->
+{% block news %}
+<li class="link active">
+    <a href="/admin/news" >
+        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+        <span class="hidden-xs hidden-sm">News</span>
+    </a>
+</li>
+{% endblock %}
+
+{% block content%}
+<div id="content">
+    <header class="clearfix">
+        <h2 class="page-title pull-left">All News</h2>
+        <a href="/admin/add_news" class="pull-right btn-xs btn btn-primary">Create articles</a>
+    </header>
+    <div class="content-inner">
+        <div class="row search-row">
+            <div class="col-md-12">
+                <div class="input-group">
+                    <input type="text" class="form-control search-field" placeholder="Search articles">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary go">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% for article in articles %}
+        <div class="row article-row">
+            <div class="col-xs-2 col-sm-1 col-md-1 status-padding">
+                <span class="label label-success label-sm">Active</span>
+            </div>
+            <div class="col-xs-10 col-sm-6 col-md-8 article-title">
+                <h5>{{article.news_title}}</h5>
+                <p>
+                    {{article.article}}
+                </p>
+                <small>{{article.news_tag}}</small>
+                <small>Posted at {{ article.posted_at.strftime('%Y-%m-%d %H:%M:%S')}}</small>
+            </div>
+            <div class="col-xs-10 col-sm-5 col-md-3 col-xs-offset-2 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 ">
+                <div class="article-actions">
+                    <a class="btn btn-xs btn-default" aria-hidden="true" href="#">
+                        <span class="glyphicon glyphicon-folder-open">&nbsp;View</span>
+                    </a>
+                    <a class="btn btn-xs btn-default" aria-hidden="true" href="#">
+                        <span class="glyphicon glyphicon-pencil">&nbsp;Edit</span>
+                    </a>
+                    <a class="btn btn-xs btn-default" aria-hidden="true"
+                     href="{{ url_for('delete',id=article.id,db_urls='News',name=article.news_title)}}">
+                        <span class="glyphicon glyphicon-remove">&nbsp;Delete</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <nav>
+                    <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

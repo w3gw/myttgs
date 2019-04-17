@@ -1,0 +1,51 @@
+{% extends 'admin/layout.html' %}
+
+<!-- css and js links -->
+{% block links %}
+<link rel="stylesheet" href="../static/css/new-articles.css">
+{% endblock %}
+<!-- side bar menu active-->
+{% block hotels %}
+<li class="link active">
+    <a href="/admin/hotels" >
+        <span class="glyphicon glyphicon-home"></span>
+        <span class="hidden-xs hidden-sm">Hotels</span>
+    </a>
+</li>
+{% endblock %}
+<!--  -->
+
+{% block content %}
+<div id="content">
+    <header>
+        <h2 class="page-title">Register New Hotels</h2>
+    </header>
+    <div class="content-inner">
+        <div class="form-wrapper">   
+     {% from "./includes/_formhelpers.html" import render_field, render_select_field %}
+            <form action="" method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                {{ render_field(form.hotelname, placeholder=form.hotelname.label.text) }}
+                {{ render_field(form.location, placeholder=form.location.label.text) }}
+                {{ render_field(form.hotelemail, placeholder=form.hotelemail.label.text) }}
+                {{ render_field(form.hotelphone, placeholder=form.hotelphone.label.text) }}
+                {{ render_select_field(form.hotelstd, placeholder=form.hotelstd.label.text,
+                    class_="form-control chosen-select" ) }}
+                {{ render_field(form.hotelbio, placeholder=form.hotelbio.label.text) }}
+                {{ render_field(form.manager_code, placeholder=form.manager_code.label.text) }}
+                <div class="clearfix">
+
+                </div>
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary pull-right">Register Hotel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    CKEDITOR.replace('hotelbio');  
+</script>
+{% endblock %}

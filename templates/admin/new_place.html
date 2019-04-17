@@ -1,0 +1,57 @@
+{% extends 'admin/layout.html' %}
+<!-- css and js links -->
+ {% block bslinks %}
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+    <script href="../static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="../static/ckeditor/ckeditor.js"></script>
+    <link rel="stylesheet" href="../static/chosen_v1.8.7/chosen.min.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    {% endblock %}
+{% block links %}
+<link rel="stylesheet" href="../static/css/articles.css">
+{% endblock %}
+<!-- side bar active -->
+{% block places %}
+<li class="link active">
+    <a href="/admin/place">
+        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+        <span class="hidden-xs hidden-sm">Tourist Destinations</span>
+    </a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div id="content">
+    <header>
+        <h2 class="page-title">Register New Tourist Destinations</h2>
+    </header>
+    <div class="content-inner">
+        <div class="form-wrapper">
+        {% from "./includes/_formhelpers.html" import render_field, render_select_field %}
+            <form method="POST" action="" enctype="multipart/form-data">
+                {{ form.hidden_tag()}}
+                <!-- name -->
+                {{ render_field(form.pname, placeholder=form.pname.label.text )}}
+                <!-- locaiton -->
+                {{ render_field(form.plocation, placeholder=form.plocation.label.text )}}
+                <!-- distance -->
+                {{ render_field(form.pdistance, placeholder=form.pdistance.label.text )}}
+                <!-- detail -->
+                {{ render_field(form.pdetail, placeholder=form.pdetail.label.text )}}
+                <div class="clearfix">
+
+                </div>
+                <div class="clearfix">
+                    <button type="submit" class="btn btn-primary pull-right">Finish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    CKEDITOR.replace('placebio');  
+</script>
+{% endblock %}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{%block title%}Home{%endblock%}</title>
+    <link rel="stylesheet" href="../static/bootstrap-4.0.0/dist/css/bootstrap.min.css">
+    <script src="../static/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/fontawesome-free-5.7.0-web/js/all.js"></script>
+    <link rel="stylesheet" href="../static/css/styless.css">
+</head>
+
+<body>
+    {% block navigation %}
+    <!-- Navigation -->
+    <nav class="nav navbar-expand-md navbar-light bg-light sticky-top">
+        <div class="container-fluid">
+            <div class="">
+                <button type="button" class="navbar-toggler pull-right" data-toggle="collapse" data-target="#navbarResponsive">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand pull-left" href="#"><img src="../static/images/ETOA.png" alt="" height="50"></a>
+
+            </div>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    {% block homemenu%}
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    {% endblock %}
+
+                    {%block placesmenu%}
+                    <li class="nav-item">
+                        <a href="/destinations" class="nav-link">Atractions</a>
+                    </li>
+                    {%endblock%}
+
+                    {%block Bookmenu%}
+                    <li class="nav-item">
+                        <a href="/select-tour" class="nav-link">Booking</a>
+                    </li>
+                    {%endblock%}
+
+                    {%block packagemenu%}
+                    <li class="nav-item">
+                        <a href="/getpackages" class="nav-link">Tour Packages</a>
+                    </li>
+                    {%endblock%}
+
+                    {%block report%}
+                     <li class="nav-item">
+                        <a href="/makereports" class="nav-link">Report</a>
+                    </li>
+                    {%endblock%}
+
+                    {%block connectmenu%}
+                     <li class="nav-item">
+                        <a href="/connect" class="nav-link">Connect</a>
+                    </li>
+                    {%endblock%}
+
+                    {%block aboutmenu%}
+                     <li class="nav-item"> 
+                        <a href="/destinations" class="nav-link">About</a>
+                    </li>
+                   {%endblock%}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Image Slider -->
+    {% endblock%}
+            <div>
+            {% include './includes/_messages.html' %}    
+            </div>
+    {% block body%}
+   
+    {% endblock%}
+    
+    <!-- footer -->
+    {% block footer %}
+    <footer>
+        <div class="container-fluid padding">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <img src="../static/images/ETA-logo.png" height="50" alt="">
+                    <hr class="light">
+                    <p>+251-923-912-334</p>
+                    <p>w3gwmak@gmail.com</p>
+                    <p>Kilinto</p>
+                    <p> Addis Ababa Ethiopia</p>
+                </div>
+                <div class="col-md-4">
+                    <hr class="light">
+                    <h5>Our Hours</h5>
+                    <hr class="light">
+                    <p>Monday: 9am,-5pm </p>
+                    <p>Saturday: 10am-4pm</p>
+                    <p>Sunday: Closed</p>
+                </div>
+                <div class="col-md-4">
+                    <hr class="light">
+                    <h5>Service Area</h5>
+                    <hr class="light">
+                    <p> Hawasa, S/N/N/P/R,</p>
+                    <p> Jimma, Oromia,</p>
+                    <p> Aksum, Tigrai</p>
+                </div>
+                <div class="col-12">
+                    <hr class="light-100">
+                    <h5>&copy; w3gwmak</h5>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+    <script src="../static/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+
+</body>
+
+</html>

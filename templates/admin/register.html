@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Log In Page</title>
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+    <script href="../static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="../static/chosen_v1.8.7/chosen.min.css">
+    <link rel="stylesheet" href="../static/css/tables.css">
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').click(function () {
+                $("#side-menu").toggleClass('hidden-xs');
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Tour and travel guidance system</a>
+        </div>
+        <div class="pull-right">
+            <ul class="nav navbar-nav">
+                {% if session.logged_in %}
+                <li>
+                    <a href="/admin/index" class="register">
+                        <span class="glyphicon glyphicon-dashboard " aria-hidden="true"></span>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                     <a href="/admin/login" class="register">
+                        <span class="glyphicon glyphicon-log-out  " aria-hidden="true"></span>
+                        log out
+                    </a>
+                </li>
+                {% else %}
+                <li>
+                     <a href="/admin/login" class="register">
+                        <span class="glyphicon glyphicon-log-in  " aria-hidden="true"></span>
+                        log in
+                    </a>
+                </li>
+                <li>
+                     <a href="/" class="register">
+                        <span class="glyphicon glyphicon-home  " aria-hidden="true"></span>
+                        Home
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid jumbotron">
+       
+        <div id="content">
+                <div>
+                    {% include './includes/_messages.html' %}
+                </div>
+            <header class="clearfix">
+                <h3 class="page-title">Create new account</h3>
+            </header>
+            <div class="content-inner">
+                <div class="form-wrapper">
+                    {% from "./includes/_formhelpers.html" import render_field, render_select_field %}
+                    <form method="POST" action="">
+                            {{ form.hidden_tag() }}
+                            <!-- first name -->
+                            {{ render_field(form.first_name, placeholder=form.first_name.label.text) }}
+                            <!-- last name -->
+                            {{ render_field(form.last_name, placeholder=form.last_name.label.text) }}
+                            <!-- email field -->
+                            {{ render_field(form.email, placeholder=form.email.label.text) }}
+                            <!-- phone number field -->
+                            {{ render_field(form.phone_number, placeholder=form.phone_number.label.text) }}
+                            <!-- address field -->
+                            {{ render_field(form.address, placeholder=form.address.label.text) }}
+                            <!-- age field -->
+                            {{ render_field(form.age, placeholder=form.age.label.text) }}
+                            <!-- gender select field -->
+                            {{ render_select_field(form.gender,class_="form-control chosen-select", placeholder=form.gender.label.text )}}
+                            <!-- password field -->
+                            {{ render_field(form.password, placeholder=form.password.label.text) }}
+                            <!-- confirm password -->
+                            {{ render_field(form.confirm, placeholder=form.confirm.label.text) }}
+                            <div class="form-group">
+                                <span class=" text text-info"> click sign up to register or cancel to go back</span>
+                            </div>
+                        <div class="clearfix">
+                            <input type="submit" class="btn btn-primary pull-right" name="sign up" value="Sign Up">&nbsp;&nbsp;&nbsp;
+                            <input type="button" class="btn btn-danger pull-right" name="cancel" value="Cancel ">
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script href="../static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="../static/chosen_v1.8.7/chosen.jquery.min.js"></script>
+    <script type="text/javascript">
+        var config = {
+            '.chosen-select': {},
+            '.chosen-select-deselect': { allow_single_deselect: true },
+            '.chosen-select-no-single': { disable_search_threshold: 10 },
+            '.chosen-select-no-result': { no_result_text: 'Oops, nothing found!' },
+            '.chosen-select-width': { width: "95%" }
+        }
+        for (var selector in config) {
+            $(selector).chosen(config[selector]);
+        }
+    </script>
+</body>
+
+</html>
