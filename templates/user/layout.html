@@ -19,10 +19,11 @@
     <nav class="nav navbar-expand-md navbar-light bg-light sticky-top">
         <div class="container-fluid">
             <div class="">
-                <button type="button" class="navbar-toggler pull-right" data-toggle="collapse" data-target="#navbarResponsive">
+                <button type="button" class="navbar-toggler pull-right" data-toggle="collapse"
+                    data-target="#navbarResponsive">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand pull-left" href="#"><img src="../static/images/ETOA.png" alt="" height="50"></a>
+                <a class="navbar-brand pull-left" href="#"><img src="../static/images/logos/ETOA.png" alt="" height="50"></a>
 
             </div>
             <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -35,10 +36,9 @@
 
                     {%block placesmenu%}
                     <li class="nav-item">
-                        <a href="/destinations" class="nav-link">Atractions</a>
+                        <a href="/user/tourist-attractions" class="nav-link">Atractions</a>
                     </li>
                     {%endblock%}
-
                     {%block Bookmenu%}
                     <li class="nav-item">
                         <a href="/select-tour" class="nav-link">Booking</a>
@@ -52,42 +52,57 @@
                     {%endblock%}
 
                     {%block report%}
-                     <li class="nav-item">
+                    <li class="nav-item">
                         <a href="/makereports" class="nav-link">Report</a>
                     </li>
                     {%endblock%}
 
                     {%block connectmenu%}
-                     <li class="nav-item">
+                    <li class="nav-item">
                         <a href="/connect" class="nav-link">Connect</a>
                     </li>
                     {%endblock%}
 
                     {%block aboutmenu%}
-                     <li class="nav-item"> 
-                        <a href="/destinations" class="nav-link">About</a>
+                    <li class="nav-item">
+                        <a href="/about" class="nav-link">About</a>
                     </li>
-                   {%endblock%}
+                    {%endblock%}
                 </ul>
             </div>
         </div>
     </nav>
     <!-- Image Slider -->
     {% endblock%}
-            <div>
-            {% include './includes/_messages.html' %}    
-            </div>
-    {% block body%}
-   
-    {% endblock%}
+    <div class="container">
+        {% include './includes/_messages.html' %}
+    </div>
     
+    {% block body%}
+
+    {% endblock%}
+    {%block payment%}
+    <div class="container padding">
+            <div class="row text-center padding">
+                <div class="col-12">
+                    <h2>Online Payments For You</h2>
+                </div>
+                <div class="col-12 ">
+                    <a href="#"><img height="70%" width="10%" src="../static/images/logos/cbelogo.png" alt="CBE Birr"> </a>
+                    <a href="#"><img height="70%" width="10%" src="../static/images/logos/hellologo.png" alt="Hello cash "> </a>
+                    <a href="#"><img height="70%" width="10%" src="../static/images/logos/mbirrlogo.png" alt="m Birr"> </a>
+                    <a href="#"><img height="70%" width="10%" src="../static/images/logos/yenelogo.png" alt="yenepay"> </a>
+                </div>
+            </div>
+    </div>
+    {%endblock%}
     <!-- footer -->
     {% block footer %}
     <footer>
         <div class="container-fluid padding">
             <div class="row text-center">
                 <div class="col-md-4">
-                    <img src="../static/images/ETA-logo.png" height="50" alt="">
+                    <img src="../static/images/logos/ETA-logo.png" height="50" alt="">
                     <hr class="light">
                     <p>+251-923-912-334</p>
                     <p>w3gwmak@gmail.com</p>
@@ -120,7 +135,8 @@
     {% endblock %}
     <script src="../static/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
     <script src="../static/js/jquery-3.3.1.min.js"></script>
-
+    {%block scriptblock%}
+    {%endblock%}
 </body>
 
 </html>

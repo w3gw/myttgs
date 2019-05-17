@@ -3,59 +3,67 @@
 
 {%block report%}
 <li class="nav-item active">
-   <a href="/makereports" class="nav-link">Report</a>
+    <a href="/makereports" class="nav-link">Report</a>
 </li>
 {%endblock%}
 {% block body%}
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-2 col-sm-2 col-md-3">
+<div class="container">
+    <div class="row">
+        <div class="col-xs-2 col-sm-2 col-md-3">
 
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-6">
+            <div class="container padding text-center">
+                <h3>Tourist's Issue report form </h3>
+                <div class="form-wrapper">
+                    <form method="post" action="" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="sr-only">full name</label>
+                            <input type="text" class="form-control" name="fullname" placeholder="Your Full Name"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="sr-only">email</label>
+                            <input type="email" class="form-control" name="email" placeholder="Your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="">select who you are reporting on</label>
+                            <select name="victim" class="form-control" required>
+                                <option value="tourguides">tourguides</option>
+                                <option value="hotels">hotels</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="sr-only">person/hotel name</label>
+                            <input type="text" class="form-control" name="victimname" placeholder="Hotel/tourguide Name"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="content" class="form-control"
+                                placeholder="write the problem you saw them do" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only">Attach Image</label>
+                            <input type="file" name="file" class="form-control">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <input type="submit" value="Send Report" class=" form-control btn btn-primary">
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="col-xs-8 col-sm-8 col-md-6">
-                    <div class="container padding text-center">
-                        <h3>Send Report </h3>
-                            <div class="form-wrapper">
-                                <form method="post" action="" enctype="multipart/form-data">
-                                    <div class="form-group">
-                                        <label class="sr-only">full name</label>
-                                        <input type="text" class="form-control" name="fullname" placeholder="Your Full Name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="" class="sr-only">email</label>
-                                        <input type="email" class="form-control" name="email" placeholder="Your email" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="" class="">select who you are reporting on</label>
-                                        <select name="victim"  class="form-control" required >
-                                            <option value="tourguides">tourguides</option>
-                                            <option value="hotels">hotels</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="" class="sr-only">person/hotel name</label>
-                                        <input type="text" class="form-control" name="victimname" placeholder="Hotel/tourguide Name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea name="content"  cols="30" rows="10"
-                                         class="form-control" placeholder="write the problem you saw them do" required></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="sr-only">Attach Image</label>
-                                        <input type="file" name="file" class="form-control">
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <div class="form-group">
-                                        <input type="submit" value="Send Report" class=" form-control btn btn-primary">
-                                    </div>
-                                </form>
-                            </div>
-                         </div>
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-3">
-
+            <div>
+                If You Are Tour guide click <a href="/tourguide-makereports">Here
+                </a> to send tour status report.
             </div>
         </div>
+        <div class="col-xs-2 col-sm-2 col-md-3">
+
+        </div>
     </div>
+</div>
 
 {% endblock%}
+{%block payment%}
+{%endblock%}

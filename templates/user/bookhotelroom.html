@@ -1,210 +1,128 @@
 {% extends 'user/layout.html'%}
-{%block Bookmenu%}
-	<li class="nav-item active ">
-	    <a href="/select-tour" class="nav-link">Booking</a>
-	</li>
-{%endblock%}
+{%block title%}Booking Hotel{%endblock%}
+
 {% block body%}
-	<div class="container-fluid padding">
-		<div class="d-md-inline-flex  d-xs-inline-flex d-sm-inline-flex d-lg-inline-flex ">
-			{% for hotel in hotels%}		
-			<div class="p-2">
-				<ul class="list-group">
-					<li class="list-group-item d-flex ">
-						<ul class="list-group"> 
-							<li class="list-group-item ">
-								<b>{{hotel.hotel_name}}</b>&nbsp;&nbsp;
-								<i class="badge badge-info badge-pill">{{hotel.hotel_standard}}</i>
-								<i class="badge badge-primary badge-pill">
-								{% if hotel.rooms.exists()%}
-								   	{%for room in hotel.rooms%}
-								   	  {% if room.reserved%}
-								  	 	  {{hotel.rooms.count()-room.reservedroom.count()}}/{{hotel.rooms.count()}} rooms available
-								   	  {%endif%}
-								    {%endfor%}
-								{%else%}
-									{{hotel.rooms.count()}} rooms available
-								{%endif%}
-								</i>
-							</li>
-							<li class="list-group-item">
-								<img src="../static/images/hotels/{{hotel.hotel_name}}/{{hotel.hotel_name}}{{hotel.reg_at}}.jpg" width="300" height="300">
-							</li>
-							<li class="list-group-item">
-								<b>Location:</b><i>{{hotel.hotel_location}}</i><br>
-								<b>Email:</b><i><a href="mailto:{{hotel.hotel_email}}" class="link"> {{hotel.hotel_email}}</a></i>
-							</li>
-							<li class="list-group-item">
-								<button class="btn btn-info" type="button" data-toggle="modal"
-								 data-target="#{{hotel.id}}moreinfo" >
-									View More
-									<span class="fa fa-folder-open"></span>
-								</button>
-								<button type="button" class="btn btn-primary" data-toggle="collapse"
-									data-target="#{{hotel.id}}rooms" >
-									Reserve Room
-									<span class="fa fa-book"></span>
-								</button>
-							</li>
-						</ul>
-					</li>
-				</ul>
-		     </div>
-		     <!-- modals -->
-		     <div id="{{hotel.id}}moreinfo" class="modal fade" role="dialog">
-			  <div class="modal-dialog">
-
-			    <!-- Modal content-->
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal">&times;</button>
-			      </div>
-			      <div class="modal-body">
-				     	<h3> More Details About {{hotel.hotel_name}} Hotel</h3>
-				     	<p>{{hotel.hotel_bio}}</p>
-				     	<div>
-				     		<ul class="list-group">
-				     		{% for image in images%}
-				     			{% if image.imagename == hotel.hotel_name %}
-				     		<li class="list-group-item">
-				     			<img src="../static/images/hotels/{{hotel.hotel_name}}/{{hotel.hotel_name}}{{image.save_time}}.jpg"
-				     			width="100%" height="100%" >
-				     		</li>
-				     			{%endif%}
-				     		{%endfor%}
-				     		</ul>
-				     	</div>
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			      </div>
-			    </div>
-
-			  </div>
-			 </div>
-			 <!-- rooms list -->
-			
-			{% endfor%}
-				
-			<div class="p-2"></div>
-		</div>
+<div class="container">
+	<div class="container jumbotron text-center">
+		<h4>Reserve Room at {{hotel.hotel_name}} Hotel</h4>
 	</div>
-	<div class="container">
-		{% for hotel in hotels%}
+	<div class="row">
+		{% for room in rooms %}
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 ">
+			<div class="card">
+				{% for image in images %}
+					{% if image.imagename == room.beds %}
+					<img style="padding:1%;"
+					 src="../static/images/hotels/{{hotel.hotel_name}}/{{room.beds}}/{{room.beds}}{{image.save_time}}.jpg"
+					 height="300"
+					 >
+					{%endif%}
+				{%endfor%}
+				<div class="card-body">
+					<h5 class="card-title text-center">
+						<b class="badge badge-primary">
+							<i>
+								{% if room.beds == 1%}
+									{{room.beds}} Bed Room</span>
+								{% elif room.beds > 1%}
+									{{room.beds}} Beds Room</span>
+								{%endif%}
+							</i></b><br>
+						<hr>
+					</h5>
+					<p class="card-text">
+						<span class="badge badge-success">
+							{{room.total_room}} Rooms
+						</span>
+						<span class="badge badge-info">Price per Night: ETB {{room.price}} Birr</span>
+						<hr>
+						<span>
+							<button type="button"
+							{% if room.total_room == 0%}
+							 class="btn btn-dark btn-sm disable" 
+							{%endif%}
+							class="btn btn-dark btn-sm"
+							 data-toggle="modal"
+								data-target="#{{room.id}}reserve">
+								<span class="">Reserve this room</span>
+							</button>
+							<button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+								data-target="#{{room.id}}showimages">
+								<span class="">Room Images</span>
+							</button>
+						</span>
 
-		 <div id="{{hotel.id}}rooms" class="collapse in border" >
-		 	<h3>Available Rooms At {{hotel.hotel_name}} Hotel Select what you want</h3>
-		 	<table class="table table-striped table-bordered table-hover table-condensed">
-		 		<thead>
-		 			<tr>
-			 			<th>#</th>
-			 			<th>Hotel Name</th>
-			 			<th>Room Number</th>
-			 			<th>Beds</th>
-			 			<th>Price Per Night</th>
-			 			<th>Actions</th>
-		 			</tr>
-		 		</thead>
-		 		<tbody>
-		 			{% for room in rooms %}
-		 			 {% if room.hotel.id == hotel.id %}
-		 			 	{% if room.reserved %}
-		 			 	{%else%}
-		 			 	<tr>
-		 			 		<td>
-		 			 			{{room.id}}
-		 			 		</td>
-		 			 		<td>{{room.hotel.hotel_name}}</td>
-		 			 		<td>{{room.number}}</td>
-		 			 		<td>{{room.beds}} beds</td>
-		 			 		<td><span class="badge badge-primary">ETB {{room.price}}</span></td>
-		 			 		<td>
-		 			 			<button type="button" class="btn btn-dark" data-toggle="modal" 
-		 			 			 data-target="#{{room.id}}reserve">
-		 			 				<span class="">Reserve</span>
-		 			 			</button>
-		 			 			<button type="button" class="btn btn-info" data-toggle="modal" 
-		 			 			data-target="#{{room.id}}showimages" >
-		 			 				<span class="">Images</span>
-		 			 			</button>
-		 			 		</td>
-		 			 	</tr>
-		 			 	<div id="{{room.id}}reserve" class="modal fade" role="dialog">
-						  <div class="modal-dialog">
+					</p>
+				</div>
+			</div>
+		</div>
+		<div id="{{room.id}}reserve" class="modal fade" role="dialog">
+			<div class="modal-dialog">
 
-						    <!-- Modal content-->
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <button type="button" class="close" data-dismiss="modal">&times;</button>
-						      </div>
-						      <div class="modal-body">
-						      	<i> Room Number {{room.number}} 
-						      	  is available on 
-						      	{{room.available_at.strftime('%a %d %Y')}}</i>
-						      	<form class="" method="POST">
-						      		<input type="hidden" name="hotel" value="{{room.hotel.id}}">
-						      		<input type="hidden" name="room" value="{{room.id}}">
-						      		<div class="form-group">
-						      			<input type="text" class="form-control" name="fullname" placeholder="Your Full Name" required>
-						      		</div>
-						      		<div class="form-group">
-						      			<input type="email" class="form-control" name="email" placeholder="Your Email" required>
-						      		</div>
-						      		<div class="form-group">
-						      			<input type="tel" name="phone" class="form-control" placeholder="Your Phone Please!" required>
-						      		</div>
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<i>{{person.fullname}} {{room.total_room}} rooms
+							are available on
+							{{room.available_at.strftime('%a %d %Y')}}</i>
+						<form class="" method="POST">
+							<input type="hidden" name="hotel" value="{{room.hotel.id}}">
+							<input type="hidden" name="room" value="{{room.id}}">
+							<input type="hidden" name="person" value="{{person.id}}">
+							<div class="form-group">
+								<input type="tel" name="phone" class="form-control" placeholder="Your Phone Please!"
+									required>
+							</div>
+							<div class="form-group">
+								<label>How Long do you want to stay with us?</label>
+								<input type="number" name="days" value="{{person.days}}" class="form-control" required>
+							</div>
+							<div class="form-group">
+									<label>How Many Rooms do you want to Book?</label>
+									<input type="number" name="reservednumber"  
+									class="form-control" required>
+								</div>
+							<div class="form-group">
+								<input type="submit" name="" value="Next" class="form-control btn btn-info">
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
 
-						      		<div class="form-group">
-						      			<label>the time you will arrive</label>
-						      			<input type="time" class="form-control" name="arrivaldate" placeholder="When Do You Arrive" required>
-						      		</div>
-						      		<div class="form-group">
-						      			<label>How Long do you want to stay with us?</label>
-						      			<input type="number" name="days" class="form-control" required>
-						      		</div>
-						      		<div class="form-group" >
-						      			<input type="submit" name="" value="Finish Booking" class="form-control btn btn-info">
-						      		</div>
-						      	</form>
-						      </div>
-						      <div class="modal-footer">
-						        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						      </div>
-						    </div>
+			</div>
+		</div>
+		<div id="{{room.id}}showimages" class="modal fade" role="dialog">
+			<div class="modal-dialog">
 
-						  </div>
-						 </div>
-						 <div id="{{room.id}}showimages" class="modal fade" role="dialog">
-						  <div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<i>{{room.beds}} bed room Pictures</i><br>
 
-						    <!-- Modal content-->
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <button type="button" class="close" data-dismiss="modal">&times;</button>
-						      </div>
-						      <div class="modal-body">
-						      	<i> Room {{room.number}} Pictures</i><br>
-						      	  
-						     	{% for image in images%}
-						      		{% if image.imagename == room.number%}
-						      	<img 
-						      	src="../static/images/hotels/{{hotel.hotel_name}}/{{room.number}}/{{room.number}}{{image.save_time}}.jpg" width="100%" height="80%">
-						      		{%endif%}
-						      	{%endfor%}
-						      </div>
-						      <div class="modal-footer">
-						        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						      </div>
-						    </div>
+						{% for image in images%}
+						{% if image.imagename == room.beds%}
+						<img src="../static/images/hotels/{{hotel.hotel_name}}/{{room.beds}}/{{room.beds}}{{image.save_time}}.jpg"
+							width="100%" height="80%">
+						{%endif%}
+						{%endfor%}
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
 
-						  </div>
-						 </div>
-		 			 	{%endif%}
-		 			 {%endif%}
-		 			{%endfor%}
-		 		</tbody>
-		 	</table>
-		 </div>
+			</div>
+		</div>
 		{%endfor%}
 	</div>
-{% endblock%}
+</div>
+{%endblock%}

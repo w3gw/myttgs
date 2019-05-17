@@ -13,7 +13,7 @@
 	<div id="content">
     <header class="clearfix">
         <h2 class="page-title pull-left">Booked Tours</h2>
-        <a href="/admin/add_new_hotel" class="pull-right btn-xs btn btn-primary">/</a>
+        <a href="/admin/reports-from-tourgudes" class="pull-right btn-xs btn btn-primary">TourGuide Reports</a>
     </header>
     <div class="content-inner">
         <table class="table table-striped table-bordered table-hover table-condensed ">
@@ -31,7 +31,7 @@
             </thead>
 
             <tbody>
-                {% for report in reports %}
+                {% for report in tourist_report %}
                 <tr>
                     <td>{{report.id}}</td>
                     <td>{{report.reporter_name}}</td>

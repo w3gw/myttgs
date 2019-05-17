@@ -1,0 +1,105 @@
+{% extends 'hotel_manager/layout.html' %}
+
+{%block content%}
+
+<div id="content">
+    <header class="clearfix">
+        <h2 class="page-title pull-left">Reserved Rooms</h2>
+        <a href="/manager/add-rooms" class="pull-right btn-xs btn btn-primary">
+            Add Room
+            <span class="glyphicon glyphicon-plus"></span>
+        </a>
+    </header>
+    <div class="content-inner">
+        <table class="table table-striped table-bordered table-hover table-condensed ">
+            <thead>
+                <tr class="success">
+                    <th>#</th>
+                    <th>FullName</th>
+                    <th>Email</th>
+                    <th>phone</th>
+                    <th>Reserved Rooms</th>
+                    <th>Room Category</th>
+                    <th>Days</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for booked in bookedrooms %}
+                <tr>
+                    <td>{{booked.id}}</td>
+                    <td>{{booked.person.fullname}}</td>
+                    <td><a href="mailto:{{booked.person.email}}">{{booked.person.email}}</a></td>
+                    <td>{{booked.phone}}</td>
+                    <td>{{booked.reserved}} </td>
+                    <td><span class="badge badge-primary">{{booked.room.beds}} bed room</span></td>
+                    <td>
+                        {{booked.days}}
+                    </td>
+                    <td>
+                        {%if booked.is_paid == True%}
+                        <a class="btn btn-outline-secondary" title="Change to Unpayed" data-toggle="modal"
+                            data-target="#{{booked.id}}makepaid">
+                            <span class="badge badge-primary">Paid</span>
+                        </a>
+                        {%else%}
+                        <a class="btn btn-outline-secondary" title="Change to payed" data-toggle="modal"
+                            data-target="#{{booked.id}}makepaid">
+                            <span class="badge badge-primary">Not Paid</span>
+                        </a>
+                        {%endif%}
+                        <!--  -->
+                    </td>
+                </tr>
+                <div id="{{booked.id}}makepaid" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    {% for payment in paymentinfo%}
+                                    {% if payment.roomspayment.id == booked.id %}
+                                    <span>Total Price:
+                                        <b class="badge badge-primary">
+                                            ETB {{payment.price}} Birr
+                                        </b>
+                                    </span>
+                                    <div>
+                                        <p>Payment System: <span>{{payment.paymentoption.name}}</span></p>
+                                        <p>Account Name: <span>{{payment.accountname}}</span></p>
+                                        <p>Account Number: <span>{{payment.acountnumber}}</span></p>
+                                    </div>
+                                    {%endif%}
+                                    {%endfor%}
+                                </div>
+                                <hr>
+                                <h5>Update Paid Status {{ booked.id}} </h5>
+                                <form method="POST" action="{{url_for('makepayment')}}">
+                                    <input type="hidden" name="id" value="{{booked.id}}">
+                                    <div class="form-group">
+                                        Are You shure To make these change?
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" name="" value="Yes" class="form-control btn btn-info">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--  -->
+                {% endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock%}

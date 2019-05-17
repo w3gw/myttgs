@@ -1,16 +1,5 @@
 {% extends 'admin/layout.html' %}
-<!-- css and js links -->
- {% block bslinks %}
-    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
-    <script href="../static/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="../static/ckeditor/ckeditor.js"></script>
-    <link rel="stylesheet" href="../static/chosen_v1.8.7/chosen.min.css">
-    <link rel="stylesheet" href="../static/css/styles.css">
-    {% endblock %}
-{% block links %}
-<link rel="stylesheet" href="../static/css/articles.css">
-{% endblock %}
+
 <!-- side bar active -->
 {% block places %}
 <li class="link active">
@@ -35,15 +24,24 @@
                 {{ render_field(form.pname, placeholder=form.pname.label.text )}}
                 <!-- locaiton -->
                 {{ render_field(form.plocation, placeholder=form.plocation.label.text )}}
+                <!-- longitude -->
+                {{ render_field(form.longfield, placeholder=form.longfield.label.text )}}
+                <!-- latitude -->
+                {{ render_field(form.latfield, placeholder=form.latfield.label.text )}}
                 <!-- distance -->
                 {{ render_field(form.pdistance, placeholder=form.pdistance.label.text )}}
                 <!-- detail -->
                 {{ render_field(form.pdetail, placeholder=form.pdetail.label.text )}}
+                <!-- category -->
+                {{ render_select_field(form.category, placeholder=form.category.label.text, 
+                    class_="form-control chosen-select")}}
+                <!-- price -->
+                {{ render_field(form.pprice, placeholder=form.pprice.label.text)}}
                 <div class="clearfix">
 
                 </div>
                 <div class="clearfix">
-                    <button type="submit" class="btn btn-primary pull-right">Finish</button>
+                    <button type="submit" class="btn btn-primary pull-right">Save </button>
                 </div>
             </form>
         </div>

@@ -3,8 +3,8 @@
 {% block history%}
 <li class="link active">
     <a href="/manager/history">
-        <span class="glyphicon glyphicon-list" aria-hidden="true" ></span>
-        <span class="hidden-xs hidden-sm">Reservation Log</span>
+        <span class="glyphicon glyphicon-time" aria-hidden="true" ></span>
+        <span class="hidden-xs hidden-sm">History</span>
     </a>
 </li>
 {%endblock%}
@@ -27,10 +27,7 @@
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Room Number</th>
-                    <th>Arrived at</th>
-                    <th>Available on</th>
-                    <th>Days Stayed</th>
+                    <th>Arrival day</th>
                     <th>Booked At</th>
                     <th>Actions</th>
                 </tr>
@@ -40,13 +37,10 @@
                 {% for log in bookedrooms %}
                 <tr>
                     <td>{{log.id}}</td>
-                    <td>{{log.fullname }}</td>
-                    <td>{{log.email}}</td>
+                    <td>{{log.person.fullname }}</td>
+                    <td>{{log.person.email}}</td>
                     <td>{{log.phone}}</td>
-                    <td>{{log.room.number}}</td>
-                    <td>{{log.arrival}}</td>
-                    <td>{{log.room.available_at.strftime('%a %b %Y')}}</td>
-                    <td>{{log.days}} days</td>
+                    <td>{{log.person.startdate.strftime('%D')}}</td>
                     <td>{{log.booked_at.strftime('%a %b %Y')}}</td>
                     <td>
                         <a href="#" class="btn btn-xs btn-info ">

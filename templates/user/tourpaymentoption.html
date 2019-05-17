@@ -1,0 +1,103 @@
+{% extends 'user/layout.html' %}
+{%block Bookmenu%}
+<li class="nav-item active ">
+  <a href="/select-tour" class="nav-link">Booking</a>
+</li>
+{%endblock%}
+{% block body%}
+<div class="container">
+  <div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <p class="panel-title ">
+                {% if person.gender == 'Male'%} Mr {% else%} Ms {%endif%}
+                <i> {{person.fullname }}</i>
+                Please Select One Of the Payment Options To pay for your service
+          </p>
+          <span>The Amount Of Money You Will Pay is:
+            {% if options == 'tour'%}
+            <i class="badge badge-primary">ETB {{person.days * person.place.price * person.people}} Birr</i>
+            {%elif options == 'package'%}
+            <i class="badge badge-primary">ETB {{person.package.package_price}}.00 Birr</i>
+            <i> For one ticket you purchased</i>
+            {%endif%}
+          </span>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            {% for payment in payments%}
+            <li class="list-group-item">
+              <a href="#{{payment.id}}PaymentInfo" data-toggle="modal" class="list-group-item list-group-item-action">
+                <span>
+                  {{payment.system_name}}
+                </span>
+                {% if payment.system_name == 'CBE-Birr'%}
+                <img src="../static/images/logos/cbelogo.png" alt="cbebirr" height="50%" width="10%">
+                {%elif payment.system_name == 'Hello-Cash'%}
+                <img src="../static/images/logos/hellologo.png" alt="cbebirr" height="50%" width="10%">
+                {%elif payment.system_name == 'Yenepay'%}
+                <img src="../static/images/logos/yenelogo.png" alt="cbebirr" height="50%" width="10%">
+                {%elif payment.system_name == 'M-Birr'%}
+                <img src="../static/images/logos/mbirrlogo.png" alt="cbebirr" height="50%" width="10%">
+                {%endif%}
+              </a>
+            </li>
+            <div id="{{payment.id}}PaymentInfo" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body">
+                    <div>
+                      <p>This is our {{payment.system_name}} Account Number
+                        <i class="badge badge-info">{{payment.act_number}}</i>
+                        Use this to make a payment and please send us your {{payment.system_name}} Account
+                        name and Number for further verification.
+                      </p>
+                    </div>
+                    <form action="" class="" method="POST">
+                      <input type="hidden" name="paymentoption" value="{{payment.id}}">
+                      <input type="hidden" name="pname" value="{{payment.name}}">
+                      <div class="form-group">
+                        <label>Enter Your {{payment.system_name}} Account Name</label>
+                        <input type="text" class="form-control" name="acc-name" placeholder="Account Name" required>
+                      </div>
+                      <div class="form-group">
+                        <label>Enter Your {{payment.system_name}} Account Number</label>
+                        <input type="text" name="acc-number" class="form-control" placeholder="Account Number" required>
+                      </div>
+                      <div class="form-group">
+                        <input type="submit" name="" value="Finish" class="form-control btn btn-info">
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            {%endfor%}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-xl-6 col-md-12 col-sm-12 col-xs-12">
+      <div class="border jumbotron">
+        {% for payment in payments%}
+        <p class="page-header"><i> {{payment.system_name}}</i>
+          <small> {{payment.links}} </small>
+        </p>
+        {%endfor%}
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock%}

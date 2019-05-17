@@ -10,14 +10,14 @@
      {% from "./includes/_formhelpers.html" import render_field, render_select_field %}
             <form action="" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <input type="text" name="room_num" class="form-control" placeholder="Rooom Number" required>
-                </div>
-                <div class="form-group">
                     <input type="number" name="beds" class="form-control" placeholder="Number of Beds" required>
                 </div>
                 <div class="form-group">
                     <input type="number" name="price" class="form-control" placeholder="price per Night" required>
                 </div>
+                <div class="form-group">
+                        <input type="number" name="totalnumber" class="form-control" placeholder="Number of Rooms" required>
+                    </div>
                 <div class="form-group">
                     <label>avalilable on</label>
                     <input type="date" name="av_at" class="form-control" required placeholder="available on" required>

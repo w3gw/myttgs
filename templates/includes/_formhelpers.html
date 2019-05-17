@@ -14,7 +14,7 @@
 
 {% macro render_select_field(field) %}
 	<div class="form-group">
-		<!-- <label for="{{ field.name }}" class="control-label">{{field.label.text}}</label> -->
+		<label for="{{ field.name }}" class="control-label">{{field.label.text}}</label>
 		{{ field(**kwargs)|safe }}
 		<div>
 			{% if field.errors%}

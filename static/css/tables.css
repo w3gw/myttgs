@@ -21,27 +21,88 @@ html, body{
     padding: 20px;
     margin-top: 50px;
 }
+
+.btn-primary, .btn-primary:hover, .btn-primary:focus{
+    background-color: #1ab349;
+    border: 1px solid #1ab349;
+}
 #content{
-    margin: 20px 0px 50px 0px;
     background-color: #fff;
     border-top: 4px #e7eaec solid;
-    margin-left: 300px;
-    margin-right: 300px;
-    margin-top: 50px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 5%;
 }
 #content header{
     border-bottom: 1px #f3f3f4;
-    padding: 10px 20px;
+    padding: 1% 2%;
 }
 .page-title{
     font-size: 24px;
     font-weight: bold;
-    margin: 0px;
 }
 .content-inner{
-    padding: 20px;
+    padding: 5%;
 }
-.btn-primary, .btn-primary:hover, .btn-primary:focus{
-    background-color: #1ab349;
-    border: 1px solid #1ab349;
+@media (max-width: 992px){
+    #content{
+        background-color: #fff;
+        border-top: 4px #e7eaec solid;
+        margin-left: 20%;
+        margin-right: 20%;
+        margin-top: 5%;
+    }
+    #content header{
+        border-bottom: 1px #f3f3f4;
+        padding: 1% 2%;
+    }
+    .page-title{
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .content-inner{
+        padding: 5%;
+    }
+}
+@media (max-width: 768px){
+    #content{
+        background-color: #fff;
+        border-top: 4px #e7eaec solid;
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 2.5%;
+    }
+    #content header{
+        border-bottom: 1px #f3f3f4;
+        padding: 1% 2%;
+    }
+    .page-title{
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0px;
+    }
+    .content-inner{
+        padding: 3%;
+    }
+}
+@media(max-width: 576px ){
+    #content{
+        background-color: #fff;
+        border-top: 4px #e7eaec solid;
+        margin-left: 2%;
+        margin-right: 2%;
+        margin-top: 10%;
+    }
+    #content header{
+        border-bottom: 1px #f3f3f4;
+        padding: 1% 2%;
+    }
+    .page-title{
+        font-size: 12px;
+        font-weight: bold;
+        margin: 0px;
+    }
+    .content-inner{
+        padding: 2%;
+    }
 }

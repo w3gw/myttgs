@@ -1,0 +1,95 @@
+{% extends 'user/layout.html'%}
+{%block title%}Booking Hotel{%endblock%}
+
+
+{% block body%}
+<div class="container padding">
+        <div class="container jumbotron">
+                <h4>Hotels Close to {{person.place.name}}</h4>
+                <p>{{person.fullname}} These are Hotels Available and
+                        close to the tourist destination you booked.
+                         please book one of these hotels for resting.</p>
+            </div>
+    <div class="row ">
+        {% for hotel in hotels%}
+        <div class="ol-md-6 col-lg-4 col-sm-12 col-xs-12">
+            <div class="card">
+                {% for image in images%}
+                {% if image.imagename == hotel.hotel_name %}
+                <img style="padding:1%;" src="../static/images/hotels/{{hotel.hotel_name}}/{{hotel.hotel_name}}{{image.save_time}}.jpg"
+                    height="300">
+                {%endif%}
+                {%endfor%}
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <hr>
+                        <b>{{hotel.hotel_name}} Hotel</b>
+                        <hr>
+                    </h5>
+                    <p class="card-text">
+                        <b>Location:</b><i>{{hotel.hotel_location}}</i><br>
+                        <b>Email:</b><i><a href="mailto:{{hotel.hotel_email}}" class="link">
+                                {{hotel.hotel_email}}</a></i>
+                        <button class="btn btn-info btn-sm" type="button" data-toggle="modal"
+                            data-target="#{{hotel.id}}moreinfo">
+                            View More
+                            <span class="fa fa-folder-open"></span>
+                        </button>
+                        <a href="/book-hotel-room/?id={{hotel.id}}&person={{person.id}}" class="btn btn-primary btn-sm">
+                            Reserve Room
+                            <span class="fa fa-book"></span>
+                        </a>
+                        
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- modals -->
+        <div id="{{hotel.id}}moreinfo" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h3> More Details About {{hotel.hotel_name}} Hotel</h3>
+                        <p>{{hotel.hotel_bio}}</p>
+                        <div>
+                            <ul class="list-group">
+                                {% for image in images%}
+                                {% if image.imagename == hotel.hotel_name %}
+                                <li class="list-group-item">
+                                    <img src="../static/images/hotels/{{hotel.hotel_name}}/{{hotel.hotel_name}}{{image.save_time}}.jpg"
+                                        width="100%" height="100%">
+                                </li>
+                                {%endif%}
+                                {%endfor%}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+ 
+        {% endfor%}
+
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        {% for hotel in hotels%}
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        </div>
+
+        {%endfor%}
+    </div>
+
+</div>
+{% endblock%}

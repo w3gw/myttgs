@@ -1,102 +1,108 @@
 {% extends 'user/layout.html'%}
 {%block title%}Packages{%endblock%}
 {%block packagemenu%}
-    <li class="nav-item active">
-        <a href="/getpackages" class="nav-link">Packages</a>
-    </li>
+<li class="nav-item active">
+  <a href="/getpackages" class="nav-link">Tour Packages</a>
+</li>
 {%endblock%}
 {%block body %}
- <div class="container-fluid padding">
-     <div class="row">
-            {% for package in packages%}
-         <div class="col-3">
-                <div class="card">
+<div class="container jumbotron text-center">
+  <h3>Buy Tour Packages</h3>
+  <p>Tour Packages are tour tickets/deals for Pre prepared tours. this packages have fixed price for selected
+    destinations and fixed days of tour. all you have to do is buying the tickets and being available on the
+    on the day of the tour. </p>
+</div>
+<div class="container padding">
+  <div class="row">
+    <!-- col-md-3 col-lg-3 col-sm-12 col-xs-12 -->
+    {% for package in packages%}
+    <div class="col-md-6 col-lg-4 col-sm-12 col-xs-12">
+      <div class="card">
 
-                        <img src="../static/images/packages/{{package.package_title}}.jpg" 
-                                class="card-img-top" alt="" height="200">
-                        <div class="card-body">
-                            <h5 class="card-title ">
-                              <b>{{package.package_title}}
-                              <span class="badge badge-sm badge-primary">{{package.total_package}} deals</span> </b></h5>
-                             <div id="{{package.id}}" class="collapse in">
-                             <p class="card-text">
-                                {{package.package_content}}
-                            </p>
-                          </div>
-                            <i class="price badge badge-primary">ETB {{package.package_price}}.00</i>
-                            <span>|</span>
-                            <i class="badge badge-secondary">{{package.package_days}} day trip</i>
-                            <i class="badge badge-info">
-                            {{package.total_package - package.package.count() }} left
-                            </i>
-                              <i class="badge badge-default">
-                              Available from {{package.package_start.strftime('%b-%y')}} until
-                              {{package.tour_start.strftime('%b-%y ')}}
-                            </i>
-                            <br><hr>
-                            <button type="button" data-toggle="collapse"
-                                  data-target="#{{package.id}}" class="btn btn-outline-info">
-                              View More
-                           </button>
-                            <a type="button" data-toggle="modal"
-                                  data-target="#myPackageModal" class="btn btn-outline-secondary">
-                              Buy Package
-                           </a>
-                        </div>
-                    </div>
-              </div>
-
-          {% endfor%}
-     </div>
-     <div id="myPackageModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-      
-              <!-- Modal content-->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                  <p>Fill the Form Please!</p>
-                 <form action="" method="post">
-                      <!-- First name  and last name-->
-                        <div class="form-group">
-                          <label class="">Select The Packge To make shure</label>
-                          <select name="package" class="form-control">
-                              {% for pkg in packages%}
-                                  <option value="{{pkg.id}}">{{pkg.package_title}}</option>
-                              {% endfor%}
-                          </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="sr-only">full name</label>
-                            <input type="text" name="fullname" class="form-control" placeholder="Your Full name" required>
-                             
-                        </div>
-                        <!--  -->
-                        <div class="form-group">
-                            <label class="sr-only">email</label>
-                            <input type="email" name="email" class="form-control" placeholder="Your E-mail" required>
-                        </div>
-                        <!--  -->
-                        <div class="form-group">
-                            <label class="sr-only">Age</label>
-                            <input type="number" name="age" placeholder="Your Age"
-                             class="form-control" min="18" required>
-                        </div>
-                         <!--  -->
-                        <div class="clearfix"></div>
-                        <div class="form-group">
-                            <button type="submit" class=" form-control btn btn-primary" >BUY</button>
-                        </div>
-                 </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-      
+        <img src="../static/images/packages/{{package.package_title}}.jpg" class="card-img-top" alt="" height="200">
+        <div class="card-body">
+          <h5 class="card-title ">
+            <b>{{package.package_title}}
+              <span class="badge badge-sm badge-primary">{{package.total_package}} deals</span> </b></h5>
+          <div id="{{package.id}}" class="collapse in">
+            <p class="card-text">
+              {{package.package_content}}
+            </p>
+          </div>
+          <i class="price badge badge-primary">ETB {{package.package_price}}.00</i>
+          <span>|</span>
+          <i class="badge badge-secondary">{{package.package_days}} day trip</i>
+          <i class="badge badge-info">
+            {{package.total_package - package.package.count() }} left
+          </i>
+          <i class="badge badge-default">
+            Available from {{package.package_start.strftime('%b-%y')}} until
+            {{package.tour_start.strftime('%b-%y ')}}
+          </i>
+          <br>
+          <hr>
+          <button type="button" data-toggle="collapse" data-target="#{{package.id}}" class="btn btn-outline-info">
+            View More
+          </button>
+          <a type="button" data-toggle="modal" data-target="#myPackageModal" class="btn btn-outline-secondary">
+            Buy Package
+          </a>
+        </div>
+      </div>
+    </div>
+    <div id="myPackageModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+    
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-     </div>
- </div>
+            <div class="modal-body">
+                <p>Your are buying ticket for {{package.package_title}} tour package</p>
+                <p>Fill the Form Please!</p>
+              <form action="" method="post">
+                <!-- First name  and last name-->
+                     <input type="hidden" name="package" value="{{package.id}}" >
+                <input type="hidden" name="packagename" value="{{package.package_title}}">
+                <div class="form-group">
+                  <label class="sr-only">full name</label>
+                  <input type="text" name="fullname" class="form-control" placeholder="Your Full name" required>
+    
+                </div>
+                <!--  -->
+                <div class="form-group">
+                  <label class="sr-only">email</label>
+                  <input type="email" name="email" class="form-control" placeholder="Your E-mail" required>
+                </div>
+                <!--  -->
+                <div class="form-group">
+                  <label class="sr-only">Age</label>
+                  <input type="number" name="age" placeholder="Your Age" class="form-control" min="18" required>
+                </div>
+                <!-- gender -->
+                <div class="form-group">
+                    <label class="">Gender</label>
+                    <select name="gender" class="form-control">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                  <button type="submit" class=" form-control btn btn-primary">Next</button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+    
+        </div>
+      </div>
+    {% endfor%}
+  </div>
+  
+</div>
 {% endblock%}

@@ -34,6 +34,7 @@ html, body{
     text-shadow: 1px 1px 10px #000;
     padding-bottom: 1rem;
 }
+
 .btn-primary{
     background-color: #6648b1;
     border: 1px solid #563d7c;
@@ -110,6 +111,9 @@ html, body{
 .fa-envelope{
     color: #d5d5d5;
 }
+.fa-envelope{
+    color: crimson;
+}
 footer{
     background-color: #3f3f3f;
     color: #d5d5d5;
@@ -158,6 +162,7 @@ hr.light-100{
     .display-4{
          font-size: 200%;
     }
+    
     .social a{
         font-size: 2.5em;
         padding: 1.2rem;
@@ -183,7 +188,8 @@ hr.light-100{
         display: none;
     }
     .display-4{
-         font-size: 160%;
+         font-size: 40%;
+         font-weight: bolder;
     }
     .social a{
         font-size: 2em;
@@ -245,14 +251,13 @@ Small (sm) devices (landscape phones, 576px and up
 /*booktour page styeles*/
 .profilename{
     float: left;
-    font-size: 20px;
-
+    font-size: 70%;
 }
 .profilename span{
     text-transform: capitalize;
 }
 .skillname{
-    font-size: 20px;
+    font-size: 70%;
     float: left;
 }
 .places{
@@ -281,19 +286,25 @@ Small (sm) devices (landscape phones, 576px and up
     border: #00aced 1px;
     border-radius: 5px;
 }
-.tourguide:hover{
+/* .tourguide:hover{
     border-width: 5px;
     border-style: outset;
     border-color: #00aced;
-}
-.imagename:hover{
+} */
+/* .imagename:hover{
     border-width: 3px;
     border-style: outset;
     border-color: #00aced;
-}
+} */
 #imagebg{
-    color: white;
-    background-image: url('../images/1999-Cadillac-Evoq-Concept-1280[1].jpg')
+    width: 100%;
+    background-repeat: no-repeat;
+    background-image: url('../images/carousel/4.jpg');
+    text-align: center;
+    vertical-align: center;
+    margin: 10%;
+    color: whitesmoke;
+
 }
 
 /* package style */
@@ -302,4 +313,24 @@ Small (sm) devices (landscape phones, 576px and up
 }
 .price{
     color: white;
+}
+.attraction{
+    border: #555 solid 1px;
+    padding: 2%;
+    border-radius: 5px;
+    margin: 5%;
+    text-align: justify;
+}
+.cont-width{
+    width: 60%;
+}
+.border{
+    padding: 5%;
+}
+.panel-title{
+    font-weight: bolder;
+    text-decoration: underline;
+}
+.panel-title i{
+    color: crimson;
 }

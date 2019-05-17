@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Log In Page</title>
+    <title>Admin Home</title>
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
     <script href="../static/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
@@ -20,64 +20,77 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Tour and travel guidance system</a>
-        </div>
-        <div class="pull-right">
-            <ul class="nav navbar-nav">
-                {% if session.logged_in %}
-                <li>
-                    <a href="/admin/index" class="register">
-                        <span class="glyphicon glyphicon-dashboard " aria-hidden="true"></span>
-                        Dashboard
-                    </a>
-                </li>
-                <li>
-                     <a href="/admin/login" class="register">
-                        <span class="glyphicon glyphicon-log-out  " aria-hidden="true"></span>
-                        log out
-                    </a>
-                </li>
-                {% else %}
-                <li>
-                    <a href="/admin/signup" class="register">
-                        <span class="glyphicon glyphicon-log-in " aria-hidden="true"></span>
-                        register
-                    </a>
-                </li>
-                <li>
-                     <a href="/admin/login" class="register">
-                        <span class="glyphicon glyphicon-log-in  " aria-hidden="true"></span>
-                        log in
-                    </a>
-                </li>
-                {% endif %}
-               
-            </ul>
-        </div>
-    </nav>
-    <div class="container-fluid jumbotron">
-        <div id="content">
-            <div class="content-inner ">
-               <h3>
-                   WELCOME TO TOUR AND TRAVEL GUIDANCE SYSTEM
-               </h3>
-               <hr>
-               <p class="text text-info">
-                  This is Adminstrator's Dashboard only Please Register or log in for managing the system 
-               </p>
-               <hr>
-               {% if not g.user.is_authenticated %}
-                <a href="/admin/signup" class="btn btn-primary btn-lg" >Register</a>
-                <a href="/admin/login" class="btn btn-success btn-lg" >Login</a>
-                {% else %}
-                <a href="{{url_for('index')}}" class="btn btn-primary">Go To Dashboard</a>
-                {% endif %}
+    <div class="container">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="row">
+                <div class="col-xs-6 col-sm-8 col-md-8 col-lg-6 hidden-xs">
+                    <div class="navbar-header ">
+                        <a class="navbar-brand " href="#">Tour and travel guidance system</a>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-4 col-lg-6 pull-right">
+                    <div class="pull-right">
+                        <ul class="nav navbar-nav">
+                            {% if session.logged_in %}
+                            <li>
+                                <a href="/admin/index" class="register">
+                                    <span class="glyphicon glyphicon-dashboard " aria-hidden="true"></span>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admin/login" class="register">
+                                    <span class="glyphicon glyphicon-log-out  " aria-hidden="true"></span>
+                                    log out
+                                </a>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a href="/admin/signup" class="register">
+                                    <span class="glyphicon glyphicon-log-in " aria-hidden="true"></span>
+                                    register
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admin/login" class="register">
+                                    <span class="glyphicon glyphicon-log-in  " aria-hidden="true"></span>
+                                    log in
+                                </a>
+                            </li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+        </nav>
+    </div>
+
+
+    <div class="container jumbotron" style="margin-top:20%;">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <h3>
+                            WELCOME TO TOUR AND TRAVEL GUIDANCE SYSTEM
+                        </h3>
+                        <hr>
+                        <p class="text text-info">
+                            This is Adminstrator's Dashboard only Please Register or log in for managing the system
+                        </p>
+                        <hr>
+                        {% if not g.user.is_authenticated %}
+                        <a href="/admin/signup" class="btn btn-primary btn-lg">Register</a>
+                        <a href="/admin/login" class="btn btn-success btn-lg">Login</a>
+                        {% else %}
+                        <a href="{{url_for('index')}}" class="btn btn-primary">Go To Dashboard</a>
+                        {% endif %}
             </div>
         </div>
+
     </div>
-    
+
     <script href="../static/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
 
