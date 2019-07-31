@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{%block title%}Home{%endblock%}</title>
+    <title>Roha Tour And Travel {%block title%}Home{%endblock%} Page</title>
     <link rel="stylesheet" href="../static/bootstrap-4.0.0/dist/css/bootstrap.min.css">
     <script src="../static/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
     <script src="../static/js/jquery-3.3.1.min.js"></script>
@@ -23,7 +23,8 @@
                     data-target="#navbarResponsive">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand pull-left" href="#"><img src="../static/images/logos/ETOA.png" alt="" height="50"></a>
+                <a class="navbar-brand pull-left" href="#">
+                    <img src="../static/images/logos/roha1.png" alt="" width="50%" height="10%"></a>
 
             </div>
             <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -62,12 +63,6 @@
                         <a href="/connect" class="nav-link">Connect</a>
                     </li>
                     {%endblock%}
-
-                    {%block aboutmenu%}
-                    <li class="nav-item">
-                        <a href="/about" class="nav-link">About</a>
-                    </li>
-                    {%endblock%}
                 </ul>
             </div>
         </div>
@@ -102,11 +97,10 @@
         <div class="container-fluid padding">
             <div class="row text-center">
                 <div class="col-md-4">
-                    <img src="../static/images/logos/ETA-logo.png" height="50" alt="">
+                    <img src="../static/images/logos/roha1.png" width="50%" height="25%" alt="">
                     <hr class="light">
                     <p>+251-923-912-334</p>
-                    <p>w3gwmak@gmail.com</p>
-                    <p>Kilinto</p>
+                    <p>wnorar@gmail.com</p>
                     <p> Addis Ababa Ethiopia</p>
                 </div>
                 <div class="col-md-4">
@@ -126,8 +120,12 @@
                     <p> Aksum, Tigrai</p>
                 </div>
                 <div class="col-12">
+                        <a class="btn btn-success" href="/admin/home">System Admin</a>
+                        <a  class="btn btn-success" href="http://10.42.0.1:5001/">Hotel Manager</a>
+                    </div>
+                <div class="col-12">
                     <hr class="light-100">
-                    <h5>&copy; w3gwmak</h5>
+                    <h5>&copy; RohaTourAndTravel</h5>
                 </div>
             </div>
         </div>

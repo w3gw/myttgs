@@ -39,7 +39,7 @@
                     <li class="link">
                         <a href="/admin/index">
                             <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
-                            <span class="hidden-xs hidden-sm">Home</span>
+                            <span class="hidden-xs hidden-sm">Dashboard</span>
                         </a>
                     </li>
                     {% endblock %}
@@ -143,12 +143,12 @@
                         </div>
                         <div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
                             <ul class="pull-right">
-                                <form class="navbar-form navbar-left hidden-xs" role="search">
+                                <!-- <form class="navbar-form navbar-left hidden-xs" role="search">
                                     <div class="form-group">
                                         <input type="text" id="header-search-field" class="form-control " placeholder="Search Places">
                                     </div>
                                     <button type="submit" class="btn btn-default glyphicon glyphicon-search"></button>
-                                </form>
+                                </form> -->
                                 <li>
                                     <a href="/logout" class="logout">
                                         <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
@@ -163,12 +163,11 @@
                      {% include './includes/_messages.html' %}    
                 </div>
                 {% block content %}
-
                 {% endblock %}
                 <div class="row">
                     <footer id="admin-footer" class="clearfix">
                         <div class="pull-left"><b>Copyright </b>&copy; 2019</div>
-                        <div class="pull-right">Ethio Tourism</div>
+                        <div class="pull-right">RohaTourAndTravel</div>
                     </footer>
                 </div>
             </div>

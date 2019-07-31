@@ -44,15 +44,13 @@
                     <td>{{p.package.package_title}}</td>
                     <td>
                         {%if p.is_paid == True%}
-                        <a class="btn btn-outline-secondary" data-toggle="modal" 
-                        data-target="#{{p.id}}makepaid" >
+                        <a class="btn btn-outline-secondary" disabled>
                             <span class="badge badge-primary">Paid</span>
-                        </a> 
-                        {%else%} 
-                        <a class="btn btn-outline-secondary" data-toggle="modal" 
-                        data-target="#{{p.id}}makepaid" >
+                        </a>
+                        {%else%}
+                        <a class="btn btn-outline-secondary" data-toggle="modal" data-target="#{{p.id}}makepaid">
                             <span class="badge badge-primary">Not Paid</span>
-                        </a> 
+                        </a>
                         {%endif%}
                     </td>
                 </tr>
@@ -74,9 +72,9 @@
                                         </b>
                                     </span>
                                     <div>
-                                        <p>Payment System: <span>{{payment.paymentoption.name}}</span></p>
-                                        <p>Account Name: <span>{{payment.accountname}}</span></p>
-                                        <p>Account Number: <span>{{payment.acountnumber}}</span></p>
+                                        <p>Payment System: <span>{{payment.paymentoption.system_name}}</span></p>
+                                        <p>Account Name: <span>{{payment.acount_name}}</span></p>
+                                        <p>Account Number: <span>{{payment.acount_number}}</span></p>
                                     </div>
                                     {%endif%}
                                     {%endfor%}
@@ -89,8 +87,7 @@
                                         Are You Shure You Want To make this change?
                                     </div>
                                     <div class="form-group">
-                                        <input type="submit" name="" value="Yes"
-                                            class="form-control btn btn-info">
+                                        <input type="submit" name="" value="Yes" class="form-control btn btn-info">
                                     </div>
                                 </form>
                             </div>

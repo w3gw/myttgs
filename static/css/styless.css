@@ -303,10 +303,12 @@ Small (sm) devices (landscape phones, 576px and up
     text-align: center;
     vertical-align: center;
     margin: 10%;
-    color: whitesmoke;
+    color: white;
 
 }
-
+.navbar-brand img{
+    border-radius: 10%;
+}
 /* package style */
 .package:hover{
     animation: cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -334,3 +336,17 @@ Small (sm) devices (landscape phones, 576px and up
 .panel-title i{
     color: crimson;
 }
+
+#aboutbackimg{
+    width: 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+    vertical-align: center;
+    color: white;
+    height: 300px;
+    background-image: url("../images/carousel/8.jpg");
+}
+#aboutbackimg div{
+    padding: 5%;
+}
+

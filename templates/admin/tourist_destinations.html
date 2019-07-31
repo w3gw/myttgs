@@ -42,7 +42,7 @@
                         <p>{{place.detail}}</p>
                     </td>
                     <td>
-                        <a href="{{ url_for('delete', id=place.id,db_urls='Place',name=place.name) }}" class="btn btn-xs btn-danger ">
+                        <a href="{{ url_for('delete', data_id=place.id,db_urls='Place',name=place.name) }}" class="btn btn-xs btn-danger ">
                             <span class="glyphicon glyphicon-remove"></span>
                             &nbsp;<label class="hidden-xs"> Delete</label>
                         </a>

@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 
 import FormField
 import models as MD
-from resources.attractions import attraction_api
+import manager
 
 from flask import (Flask, flash, g, jsonify, logging, redirect,
                    render_template, request, session, url_for)
@@ -17,7 +17,7 @@ from passlib.hash import pbkdf2_sha256
 
 DEBUG = True
 HOST = '10.42.0.1'
-PORT = '7000'
+PORT = '5000'
 
 UPLOAD_FOLDER = 'static/images'
 
@@ -26,7 +26,6 @@ ALLOWED_EXTENSIONS = set(['txt', 'mp4', 'png', 'jpg', 'jpeg', 'gif'])
 # Initialize flask app
 adminapp = Flask(__name__)
 adminapp.secret_key = "$#ds32Ds3SDS#e32"
-adminapp.register_blueprint(attraction_api)
 
 # configure upload folder for images and files
 adminapp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -48,7 +47,6 @@ login_manager = LoginManager()
 login_manager.init_app(adminapp)
 login_manager.login_view = 'adminlogin'
 
-admin_global = current_user
 @login_manager.user_loader
 def load_user(user_id):
     """Loads the logged in user/session """
@@ -149,14 +147,16 @@ def index():
         try:
             with MD.DB.transaction():
                 MD.PaymentSystem.create(
+                    hotel=0,
                     system_name = request.form['system-name'],
                     act_name = request.form['account-name'],
                     act_number = request.form['account-number'],
                     links = request.form['system-info']
                 )
-        except Exception:
+        except Exception as e:
             flash("Internal Error try again later:",'danger')
             return redirect(url_for('index'))
+        flash("You added a payment system",'success')
         return redirect(url_for('index'))
 
     comments = MD.Comment.select().limit(2)
@@ -276,12 +276,34 @@ def tourguides():
                             tourguides=tourguides,
                             skills=skills,
                            places=places)
+#add places for tourguide
+@adminapp.route("/addplace-tg", methods=['POST'])
+@login_required
+def addTgPlace():
+    """admin route for adding sites the tourguides works on"""
+    if request.method == 'POST':
+        try:
+            with MD.DB.transaction():
+                if request.form['place'] == '':
+                    pass
+                else:
+                    MD.TourGuidePlace.create(
+                        tourguide=request.form['tourguide'],
+                        place=request.form['place']
+                    )
+        except MD.IntegrityError as e:
+            print(e)
+            flash('Internal Error Try Again Later', 'danger')
+            return redirect(url_for('tourguides'))
+        flash("You Successfully updated tour guide status", 'success')
+        return redirect(url_for('tourguides'))
+    return render_template('/admin/tourguides.html')
 
 # add skills for tour guide
 @adminapp.route("/addskill", methods=['POST'])
 @login_required
 def addskill():
-    """admin route for adding language skill and sites the tourguides work on"""
+    """admin route for adding language skill the tour guide knows"""
     if request.method == 'POST':
         try:
             with MD.DB.transaction():
@@ -291,13 +313,6 @@ def addskill():
                     MD.TourGuideSkill.create(
                         tourguide=request.form['tourguide'],
                         skill=request.form['skill']
-                    )
-                if request.form['place'] == '':
-                    pass
-                else:
-                    MD.TourGuidePlace.create(
-                        tourguide=request.form['tourguide'],
-                        place=request.form['place']
                     )
         except MD.IntegrityError as e:
             flash('Internal Error Try Again Later', 'danger')
@@ -451,36 +466,36 @@ def bookedtours():
     #    send email notification
         send_mail(
             receiver=tour_person.email,
-            message = """\n
-                        Hello there %s You have completed booking and payed for your
-                        custom tour to %s. Email will be sent to you for further notifications.
+            message = """<br>
+                        <h4>Hello there <b>%s</b> You have completed booking and payed for your
+                        custom tour to <b>%s.</b> Email will be sent to you for further notifications.</h4>
 
-                        Thank You!
+                        <i>Thank You!</i>
                     """%(tour_person.fullname,tour_person.place.name )
             ) 
             # send mail notification to the tour guide
         send_mail(
             receiver=tour_person.tourguide.email,
-            message = """
-                        Hello there %s %s !\n
-                        Tourist with the following information selected you to guide him/her\n
-                        for a custom tour he/she booked. please be there at the provided time.\n
+            message = """<br>
+                        <h4><b>Hello there %s %s !</b><br>
+                        Tourist with the following information selected you to guide him/her<br>
+                        for a custom tour he/she booked. please be there at the provided time.<h4>
 
-                        Thank You!\n\n
-
-                        Tourist Name: %s ,\n
-                        Tourist Email: %s,\n
-                        Tourist Phone: %s,\n
-                        Tourist Gender: %s,\n
-                        Tourist age: %s\n
-                        Number of people: %s,\n
-                        Number of days: %s,\n
-                        Tourist Attraction: %s,\n
-                        location:%s,\n
-                        Tour Date: %s,\n
-                        Hotel Booked: %s Hotel \n
-                        Hotel Location: %s \n
-                        
+                        <i>Thank You!</i><br>
+                        <ul>
+                        <li>Tourist Name: %s </li>
+                        <li>Tourist Email: %s </li>
+                        <li>Tourist Phone: %s </li>
+                        <li>Tourist Gender: %s</li>
+                        <li>Tourist age: %s </li>
+                        <li>Number of people: %s </li>
+                        <li>Number of days: %s </li>
+                        <li>Tourist Attraction: %s </li>
+                        <li>location:%s </li>
+                        <li>Tour Date: %s </li>
+                        <li>Hotel Booked: %s Hotel </li>
+                        <li>Hotel Location: %s </li>
+                        </ul>
                     """%(tour_person.tourguide.first_name,
                         tour_person.tourguide.last_name, 
                         tour_person.fullname,tour_person.email,
@@ -495,7 +510,20 @@ def bookedtours():
 
         return redirect(url_for('bookedtours'))
     return render_template('admin/bookedtour.html',bookedrooms=bookedrooms, 
-                            tours=tours, paymentinfo=paymentinfo)
+                            tours=tours, paymentinfo=paymentinfo,
+                            currenttime = datetime.datetime.now())
+
+@adminapp.route('/booked-tour-history')
+def getbookedtourhistory():
+    tours=''
+    bookedrooms = MD.BookedRoom.select()
+    if MD.TourInfo.select().exists():
+        tours = MD.TourInfo.select()
+    paymentinfo = MD.PaymentList.select().where(MD.PaymentList.tourpayment > 0)
+    return render_template('admin/bookedtourhistory.html',
+                            tours=tours,
+                            bookedrooms=bookedrooms,
+                            paymentinfo=paymentinfo)
 
 
 @adminapp.route('/admin/purchased-package', methods=['GET', 'POST'])
@@ -515,11 +543,12 @@ def purchasedpackege():
         #send email notification to the tourist
         send_mail(
             receiver=package_person.email,
-            message = """
-                        Hello there %s You have completed buying a ticket for %s 
-                        package. Your ticket number is %s be shure to be present 
-                        at our office on specified date being(%s). We will be waiting for you
-                        Thank You!
+            message = """<br>
+                        <h4>Hello there <b>%s</b> You have completed buying a ticket for <b> %s</b><br> 
+                        package. Your ticket number is %s be shure to be present <br> 
+                        at our office on specified date being(%s). We will be waiting for you</h4>
+
+                        <i>Thank You!</i>
                     """%(package_person.fullname,
                             package_person.package.package_title,
                             package_person.id, 
@@ -591,7 +620,7 @@ def assetsmanager():
 def userhome():
     """index route for the tourist or the user homepage"""
     attraction = MD.Place.select()
-    hotels = MD.Hotel.select().limit(4)
+    hotels = MD.Hotel.select().limit(2)
     imglist = MD.ImageList.select()
     return render_template('user/index.html',
                             atts=attraction, 
@@ -626,8 +655,12 @@ def attraction():
 @adminapp.route('/select-tour', methods=['GET', 'POST'])
 def selecttour():
     """user route for booking a tour."""
-    places = MD.Place.select()
-    tourguides = MD.TourGuide.select().limit(3)
+    places = ''
+    if MD.Place.select().exists():
+        places = MD.Place.select()
+    
+    tourguides = MD.TourGuide.select().limit(2)
+
     tourguideplace = MD.TourGuidePlace.select()
     imglist = MD.ImageList.select()
     tgskills = MD.TourGuideSkill.select()
@@ -657,13 +690,13 @@ def selecttour():
 
         send_mail(
             receiver=form.email.data,
-            message="""
-                    Hello There %s You Have Booked A Tour to %s Successfully!
+            message="""<br>
+                    <h4> Hello There <b>%s</b> You Have Booked A Tour to <b>%s</b> Successfully!
                     Please Click the link below to make payments
 
-                    http://%s:%s/makepayment/%s 
+                   <a href='http://%s:%s/makepayment/%s'>Make Tour Payments</a> </h4>
 
-                    thank you !!
+                    <i>thank you !!!</i>
                     """%(form.fname.data,form.destination.data,HOST,PORT ,form.fname.data)
         )
         return redirect(url_for('makepayment', name=name))
@@ -723,12 +756,12 @@ def makepayment(name):
         # send email notification
         send_mail(
             receiver=person.email,
-            message="""\n
-                    Hello There %s You submited your %s account Successfully!\n
-                    This is our %s account/phone number [ %s ]. Use this to transfer\n
-                    the money you have to pay for Booking a tour. the cost is ETB %s Birr.\n\n
+            message="""<br>
+                    <h4>Hello There <b>%s</b> You submited your %s account Successfully!<br>
+                    This is our <b>%s</b> account/phone number [<i> %s </i>]. Use this to transfer<br>
+                    the money you have to pay for Booking a tour. the cost is ETB %s Birr.</h4>
 
-                    thank you !!
+                    <i>thank you !!</i>
                     """%(person.fullname, 
                         single_pay_sys.system_name,
                         single_pay_sys.system_name,
@@ -736,6 +769,7 @@ def makepayment(name):
                         person.days*person.place.price*person.people
                         )
                  )
+        flash("You Have Successfully Booked a tour","success")
         return redirect(url_for('gethotelslist', person=person.id))
     return render_template('user/tourpaymentoption.html', person=person, options='tour', payments=payments)
 
@@ -789,12 +823,12 @@ def bookrooms():
         # send email notification to the tourist.
         send_mail(
             receiver=person.email,
-            message="""\n
-                    Hello There %s You Have Booked A Room Successfully!\n
-                    Please Click the link below to make payments\n
-                    http://%s:%s/makeroompayment/%s \n\n
+            message="""<br>
+                    <h4>Hello There %s You Have Booked A Room Successfully!
+                    Please Click the link below to make payments
+                    <a href='http://%s:%s/makeroompayment/%s'>Make Room Payment</a><h4>
 
-                    Thank you!
+                    <i>Thank you!</i>
                     """%(person.fullname,HOST,PORT, person.fullname)
         )
         return redirect(url_for('payfor_room', name=person.id))
@@ -828,12 +862,12 @@ def payfor_room(name):
         # send email notification
         send_mail(
             receiver=person.person.email,
-            message="""\n
-                    Hello There %s You submited your %s account Successfully!\n
-                    This is our %s account/phone number [ %s ]. Use this to transfer\n
-                    the money you have to pay for Booking a tour. the cost is ETB %s Birr.\n\n
+            message="""<br>
+                    <h4>Hello There %s You submited your %s account Successfully!<br>
+                    This is our %s account/phone number [ %s ]. Use this to transfer<br>
+                    the money you have to pay for Booking a tour. the cost is ETB %s Birr.<h4>
 
-                    thank you !!
+                    <i>thank you !!</i>
                     """%(person.person.fullname, 
                         single_pay_sys.system_name,
                         single_pay_sys.system_name,
@@ -841,6 +875,7 @@ def payfor_room(name):
                         person.days*person.room.price
                         )
                  )
+        flash("You Have Successfully booked a room ","success")
         return redirect(url_for('selecttour'))
     return render_template('user/hotelpaymentoption.html', person=person, options='rooms', payments=payments)
 
@@ -865,12 +900,14 @@ def getPackages():
         # send email notification to the perosn purchased the package.
         send_mail(
             receiver=request.form['email'],
-            message="""\n
-                    Hello There %s You Have Purchased a %s tour package Successfully!\n
+            message="""<br>
+                    <h4>Hello There <b> %s </b>You Have Purchased a <b>%s</b> 
+                    tour package Successfully!
                     Please Click the link below to make payments\n
-                    http://%s:%s/make-package-payment/%s \n\n
+                    <a href='http://%s:%s/make-package-payment/%s'>Make Package Payement</a>
+                     </h4>
 
-                    thank you!
+                    <i>thank you!</i>
                     """%(request.form['fullname'], 
                         request.form['packagename'],
                         HOST,PORT,
@@ -908,12 +945,12 @@ def payfor_package(name):
         # send email notification
         send_mail(
             receiver=person.email,
-            message="""\n
-                    Hello There %s You submited your %s account Successfully!\n
-                    This is our %s account/phone number [ %s ]. Use this to transfer\n
-                    the money you have to pay for Booking a tour. the cost is ETB %s Birr.\n\n
+            message="""<br>
+                    <h4>Hello There %s You submited your %s account Successfully!<br>
+                    This is our %s account/phone number [ %s ]. Use this to transfer<br>
+                    the money you have to pay for Booking a tour. the cost is ETB %s Birr.</h4>
 
-                    thank you !!
+                    <i>thank you !!</i>
                     """%(person.fullname, 
                         single_pay_sys.system_name,
                         single_pay_sys.system_name,
@@ -921,6 +958,7 @@ def payfor_package(name):
                         person.package.package_price
                         )
                  )
+        flash("You Have Successfully Purchased "+person.package.package_title,"success")
         return redirect(url_for('getPackages'))
     return render_template('user/tourpaymentoption.html', person=person, options='package', payments=payments)
 
@@ -941,7 +979,7 @@ def makereports():
 
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash(' No image part but report saved', 'danger')
+            flash(' No image part but report saved', 'success')
             return redirect(request.url)
         file = request.files['file']
         # if user does not select file, browser also
@@ -975,7 +1013,7 @@ def savetourguidereport():
 
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash(' No image part but report saved', 'danger')
+            flash(' No image part but report saved', 'success')
             return redirect(request.url)
         file = request.files['file']
         # if user does not select file, browser also
@@ -1019,47 +1057,59 @@ def about():
 # Other util routes log in and logouts
 #
 @adminapp.errorhandler(404)
-def not_found(error):
-    return render_template('includes/404.html', user=admin_global), 404
-
-# util routes
-@adminapp.route('/delete/<id>/<db_urls>/<name>', methods=['GET', 'POST'])
 @login_required
-def delete(id, db_urls, name):
+def not_found(error):
+    return render_template('includes/404.html'), 404
+# deativate booked tour
+@adminapp.route('/deactivate',methods=['GET','POSt'])
+def deactivatetour():
+    if request.method == 'GET':
+        tourid = request.args.get('id')
+        MD.TourInfo.deativate(id=tourid)
+    return render_template('admin/bookedtour.html')
+# util routes
+@adminapp.route('/delete/<data_id>/<db_urls>/<name>', methods=['GET', 'POST'])
+@login_required
+def delete(data_id,db_urls,name):
     """this route handles deleting package,hotels,palces 
         reports tourguides and their folders for uploading files"""
     try:
+        print(db_urls)
         if db_urls == 'Package':
-            MD.Package.get(MD.Package.id == id).delete_instance()
+            MD.Package.get(MD.Package.id == data_id).delete_instance()
             os.remove('static/images/packages/'+str(name)+'.jpg')
             flash("Package Deleted Successfully", "success")
             return redirect(url_for('packages'))
         elif db_urls == 'Hotel':
-            MD.Hotel.get(MD.Hotel.id == id).delete_instance()
+            MD.Hotel.get(MD.Hotel.id == data_id).delete_instance()
             os.rmdir('static/images/hotels/'+str(name))
             flash('Hotel deleted Successfully', 'success')
             return redirect(url_for('hotels'))
         elif db_urls == 'Place':
-            MD.Place.get(MD.Place.id == id).delete_instance()
+            MD.Place.get(MD.Place.id == data_id).delete_instance()
             for images in MD.ImageList.select().where(MD.ImageList.imagename == name):
                 os.remove('static/images/places/'+str(name)+'/' +
-                          str(name)+str(image.savetime)+'.jpg')
-            os.rmdir('static/images/places'+str(name))
+                        str(name)+str(image.savetime)+'.jpg')
+            os.rmdir('static/images/places/'+str(name))
             flash('Place deleted Successfully', 'success')
             return redirect(url_for('places'))
-        elif db_urls == 'Report':
-            MD.Report.get(MD.Report.id == id).delete_instance()
+        elif db_urls == 'TouristReport':
+            MD.TouristReport.get(MD.TouristReport.id == data_id).delete_instance()
             os.remove('static/images/reports/'+str(name)+'.jpg')
             flash('Report deleted Successfully', 'success')
             return redirect(url_for('reportslist'))
+        elif db_urls == 'TourGuideReport':
+            MD.TourGuideReport.get(MD.TourGuideReport.id == data_id).delete_instance()
+            flash('Report deleted Successfully', 'success')
+            return redirect(url_for('tourguidereport'))
         elif db_urls == 'TourGuide':
-            MD.TourGuide.get(MD.TourGuide.id == id).delete_instance()
+            MD.TourGuide.get(MD.TourGuide.id == data_id).delete_instance()
             os.remove('static/images/tourguides/'+str(name)+'.jpg')
             flash('TourGuide deleted Successfully', 'success')
             return redirect(url_for('tourguides'))
     except Exception:
         flash("Error Deleting "+db_urls,"danger")
-    return render_template('admin/index.html', user=admin_global)
+    return render_template('admin/index.html')
 
 # Function to send email
 def send_mail(receiver, message):
@@ -1067,7 +1117,7 @@ def send_mail(receiver, message):
         msg = Message("Tour And Travel Guidance System",
                       sender="wnorar@gmail.com",
                       recipients=[receiver])
-        msg.body = message
+        msg.html = message
         mail.send(msg)
         print('Mail sent! to '+receiver)
     except Exception as e:
@@ -1076,4 +1126,4 @@ def send_mail(receiver, message):
 
 if __name__ == '__main__':
     MD.init_All()
-    adminapp.run(debug=DEBUG, port=PORT, host=HOST)
+    adminapp.run(debug=False, port=PORT, host=HOST)

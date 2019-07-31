@@ -113,7 +113,7 @@ class RegistrationForm(FlaskForm):
     gender = SelectField("Gender", [validators.DataRequired()],
                          choices=[('male', 'Male'), ('female', 'Female')])
     manager_code = html5.IntegerField(
-        'Enter the Your Code', [validators.DataRequired()])
+        'Enter Your Code', [validators.DataRequired()])
     password = PasswordField('Password',
                              [validators.DataRequired(),
                               validators.EqualTo('confirm', message='Passwords do not match')])

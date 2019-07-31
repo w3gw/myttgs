@@ -4,7 +4,13 @@
 {% block body%}
 <div class="container">
 	<div class="container jumbotron text-center">
-		<h4>Reserve Room at {{hotel.hotel_name}} Hotel</h4>
+			<div id="aboutbackimg">
+					<div>
+					<h3><b>Reserve Room at {{hotel.hotel_name}} Hotel</b></h3>
+					<hr class="light">
+					</div>
+				</div>
+		<h4></h4>
 	</div>
 	<div class="row">
 		{% for room in rooms %}
@@ -21,11 +27,11 @@
 				<div class="card-body">
 					<h5 class="card-title text-center">
 						<b class="badge badge-primary">
-							<i>
+							<i>Category:
 								{% if room.beds == 1%}
-									{{room.beds}} Bed Room</span>
-								{% elif room.beds > 1%}
-									{{room.beds}} Beds Room</span>
+									 Single Bed </span>
+								{% elif room.beds == 2%}
+									 Double Bed </span>
 								{%endif%}
 							</i></b><br>
 						<hr>

@@ -1,10 +1,28 @@
 {% extends 'user/layout.html' %}
+{%block title%}Payment{%endblock%}
 {%block Bookmenu%}
 <li class="nav-item active ">
   <a href="/select-tour" class="nav-link">Booking</a>
 </li>
 {%endblock%}
 {% block body%}
+<div class="container">
+    <div class="container text-center padding jumbotron">
+            <div id="aboutbackimg">
+                <div>
+                    <h3><b>Pay For Tour</b></h3>
+                    <hr class="light">
+                    <p>
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
+                        Dolorem non ex nisi dolore, sunt deleniti tempore minima ratione repellendus 
+                        id fugit tempora exercitationem totam quod sequi, asperiores eligendi 
+                        ipsum? Quo?
+                     </p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 <div class="container">
   <div class="row">
     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -42,6 +60,12 @@
                 <img src="../static/images/logos/mbirrlogo.png" alt="cbebirr" height="50%" width="10%">
                 {%endif%}
               </a>
+            </li>
+            <li class="list-group-item">
+              <p> 
+                  <a href="/get-hotels-list/{{person.id}}">click here</a>
+                  If You do not hava any online payment option. you will be paying manually
+               </p>
             </li>
             <div id="{{payment.id}}PaymentInfo" class="modal fade" role="dialog">
               <div class="modal-dialog">

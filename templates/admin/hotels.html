@@ -47,7 +47,7 @@
                         <p>{{ hotel.hotel_bio}}</p>
                     </td>
                     <td>
-                        <a href="{{ url_for('delete', id=hotel.id,db_urls='Hotel',name=hotel.hotel_name) }}" class="btn btn-xs btn-danger ">
+                        <a href="/delete/{{hotel.id}}/Hotel/{{hotel.hotel_name}}" class="btn btn-xs btn-danger ">
                             <span class="glyphicon glyphicon-remove"></span>
                             &nbsp;<label class="hidden-xs"> Delete</label>
                         </a>

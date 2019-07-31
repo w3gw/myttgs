@@ -50,7 +50,7 @@
                         
                     </td>
                     <td>
-                        <a href="{{ url_for('delete',id=package.id,db_urls='Package',name=package.package_title)}}" class="btn btn-xs btn-danger ">
+                        <a href="/delete/{{package.id}}/Package/{{package.package_title}}" class="btn btn-xs btn-danger ">
                         &nbsp;<label class="hidden-xs"> Delete</label>
                        <span class="glyphicon glyphicon-remove"></span>
                         </a>

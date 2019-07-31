@@ -12,7 +12,7 @@
 {% block content%}
 	<div id="content">
     <header class="clearfix">
-        <h2 class="page-title pull-left">Booked Tours</h2>
+        <h2 class="page-title pull-left">Reports from tourguides</h2>
         <a href="/reportslist" class="pull-right btn-xs btn btn-primary">Tourist Reports</a>
     </header>
     <div class="content-inner">
@@ -45,7 +45,7 @@
                             <label class="hidden-xs">More</label>
                             <span class="glyphicon glyphicon-folder-open"></span>
                         </a>
-                        <a href="{{ url_for('delete', id=report.id,db_urls='Report',name=report.reporter_name) }}" class="btn btn-sm btn-danger ">
+                        <a href="/delete/{{report.id}}/TourGuideReport/{{report.reporter}}" class="btn btn-sm btn-danger ">
                                 <label class="hidden-xs"> Delete</label>
                                 <span class="glyphicon glyphicon-remove"></span>
                                 

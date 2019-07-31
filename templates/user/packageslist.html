@@ -7,10 +7,16 @@
 {%endblock%}
 {%block body %}
 <div class="container jumbotron text-center">
-  <h3>Buy Tour Packages</h3>
-  <p>Tour Packages are tour tickets/deals for Pre prepared tours. this packages have fixed price for selected
-    destinations and fixed days of tour. all you have to do is buying the tickets and being available on the
-    on the day of the tour. </p>
+  <div id="aboutbackimg">
+    <div>
+        <h3><b>Buy Tour Packages</b></h3>
+        <hr class="light">
+        <p>Tour Packages are tour tickets/deals for Pre prepared tours. this packages have fixed price for selected
+          destinations and fixed days of tour. all you have to do is buying the tickets and being available on the
+          on the day of the tour. </p>
+    </div>
+  </div>
+  
 </div>
 <div class="container padding">
   <div class="row">
@@ -44,13 +50,13 @@
           <button type="button" data-toggle="collapse" data-target="#{{package.id}}" class="btn btn-outline-info">
             View More
           </button>
-          <a type="button" data-toggle="modal" data-target="#myPackageModal" class="btn btn-outline-secondary">
+          <a type="button" data-toggle="modal" data-target="#{{package.id}}myPackageModal" class="btn btn-outline-secondary">
             Buy Package
           </a>
         </div>
       </div>
     </div>
-    <div id="myPackageModal" class="modal fade" role="dialog">
+    <div id="{{package.id}}myPackageModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
     
           <!-- Modal content-->

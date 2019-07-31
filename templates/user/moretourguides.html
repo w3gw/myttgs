@@ -1,5 +1,5 @@
 {% extends 'user/layout.html' %}
-{%block title%}Booking A tour{%endblock%}
+{%block title%}Tour Guides{%endblock%}
 
 {%block Bookmenu%}
 <li class="nav-item active ">
@@ -7,13 +7,19 @@
 </li>
 {%endblock%}
 {% block body%}
-
-<div class="container padding">
-	<div class="row welcome text-center">
-		<div class="col-12">
-			<h1 class="display-4">Our Tour Guides</h1>
+<div class="container text-center padding jumbotron">
+	<div id="aboutbackimg">
+		<div class="section-top text-center">
+			<h2>Our tour guides</h2>
 			<hr class="light">
+			<p>Who are in extremely love with eco friendly system.</p>
 		</div>
+	</div>
+</div>
+</div>
+<div class="container padding">
+	<div class="col-lg-12">
+
 	</div>
 </div>
 <div class="container ">
@@ -21,33 +27,46 @@
 		{%for tg in tourguides%}
 		<div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
 			<div class="card">
-				<img src="../static/images/tourguides/{{tg.first_name}}.jpg" class="card-img-top" alt="">
+				<img src="../static/images/tourguides/{{tg.first_name}}.jpg" class="card-img-top" height="300" alt="">
 				<div class="card-body">
 					<h4 class="card-title">{{tg.first_name}} {{tg.last_name}} </h4>
 					<p class="card-text">
 						<a href="mailto:{{tg.email}}">
 							<span class="fa fa-envelope"></span>
 							{{tg.email}}
+
+							<ul class="list-group list-group-flush">
 						</a><br>
-						Skills:
-						{%for tgplace in tgplaces%}
-						{%if tgplace.tourguide.id == tg.id%}
-						<a href="/user/tourist-attractions?id={{tg.place}}">{{tgplace.place.name}}</a>
-						{%endif%}
-						{%endfor%}
+						<li class="list-group-item">
+							<h4 class="text text-success">
+								Places
+							</h4>
+						</li>
+						<li class="list-group-item">
+							{%for tgplace in tgplaces%}
+							{%if tgplace.tourguide.id == tg.id%}
+							<a href="/user/tourist-attractions?id={{tg.place}}">{{tgplace.place.name}}</a><br>
+							{%endif%}
+							{%endfor%}
+						</li>
+
+						<li class="list-group-item">
+							<h4 class="text text-success">Language</h4>
+						</li>
+						<li class="list-group-item">
 						{%for tgskill in tgskills%}
 						{%if tgskill.tourguide.id == tg.id%}
-						<a href="#">{{tgskill.skill.skill_name}}</a>
+						<a href="#">{{tgskill.skill.skill_name}}</a><br>
 						{%endif%}
 						{%endfor%}
+						</li>
+						</ul>
 					</p>
-					<a href="#" class="btn btn-outline-secondary">See Profile</a>
+					<!-- <a href="#" class="btn btn-outline-secondary">See Profile</a> -->
 				</div>
 			</div>
 		</div>
 		{%endfor%}
 	</div>
 </div>
-
-
 {% endblock%}

@@ -14,7 +14,7 @@ from flask_mail import Mail, Message
 
 DEBUG = True
 HOST = '10.42.0.1'
-PORT = '7000'
+PORT = '5001'
 
 UPLOAD_FOLDER = 'static/images'
 
@@ -52,6 +52,7 @@ def load_user(user_id):
 		return MD.Manager.get(MD.Manager.id == user_id)
 	except MD.DoesNotExist:
 		abort(404)
+		return None
 
 @managerapp.before_request
 def before_request():
@@ -81,6 +82,7 @@ def logout():
 	flash('You are logged out', 'success')
 	return redirect(url_for('login'))
 
+@managerapp.route('/', methods=['POST','GET'])
 @managerapp.route('/manager', methods=['POST','GET'])
 @login_required
 def manager():
@@ -402,4 +404,4 @@ def send_mail(receiver, message):
 
 if __name__ == '__main__':
 	MD.init_All()
-	managerapp.run(debug=DEBUG,port=PORT)
+	managerapp.run(debug=False,host=HOST,port=PORT)

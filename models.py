@@ -5,13 +5,15 @@ from flask_login import UserMixin
 from passlib.hash import pbkdf2_sha256
 
 db = 'tourandtravel'
-db_user = 'wogayehu'
-db_pass = '123456'
+db_user = 'root'
+db_pass = ''
 db_host = 'localhost'
 
 # DB = MySQLDatabase(db,user=db_user,password=db_pass, host=db_host)
 
-DB = SqliteDatabase('tourandtravel.db')
+DB = SqliteDatabase('tourandtravel.db',pragmas={
+                            'synchronous':0,
+                            'journal_mode':'wal'})
 
 
 class Admins(Model, UserMixin):
@@ -87,7 +89,7 @@ class Package(Model):
                     total_package=num
                 )
         except IntegrityError:
-            raise ValueError("Package Already Exists")
+            pass
 
     @classmethod
     def get_package(self):
@@ -111,7 +113,8 @@ class PurchasedPackage(Model):
     email = CharField()
     age = IntegerField()
     gender = CharField()
-    package = ForeignKeyField(Package, backref='package')
+    package = ForeignKeyField(Package, backref='package',
+                    on_delete='CASCADE',on_update='CASCADE')
     is_paid = BooleanField(default=False)
     purchased_at = DateTimeField(default=datetime.datetime.now)
 
@@ -201,8 +204,7 @@ class Hotel(Model):
                     manager_code=code
                 )
         except IntegrityError:
-            raise ValueError('Hotel Already Exists')
-            flash(ValueError)
+            pass
 
     @classmethod
     def update_hotel(self, name, loc, email, phone, std, bio, id):
@@ -229,7 +231,8 @@ class Manager(Model, UserMixin):
     address = CharField(max_length=100, default=None)
     age = CharField()
     gender = CharField(max_length=10)
-    hotel = ForeignKeyField(Hotel, backref='hotels')
+    hotel = ForeignKeyField(Hotel, backref='hotels',
+                    on_delete='CASCADE',on_update='CASCADE')
     password = CharField(max_length=255)
 
     class Meta:
@@ -269,8 +272,8 @@ class Room(Model):
     price = IntegerField()
     total_room = IntegerField()
     available_at = DateTimeField()
-    hotel = ForeignKeyField(Hotel, backref='rooms')
-    reserved = BooleanField(default=False)
+    hotel = ForeignKeyField(Hotel, backref='rooms',
+                    on_delete='CASCADE',on_update='CASCADE')
 
     class Meta:
         database = DB
@@ -297,15 +300,6 @@ class Room(Model):
                     Room.id == id).execute()
         except Exception as e:
             pass
-
-    @classmethod
-    def change_status(self, reserved, room):
-        try:
-            with DB.transaction():
-                self.update(reserved=reserved).where(Room.id == room).execute()
-        except Exception as e:
-            pass
-
 
 
 class Skill(Model):
@@ -415,10 +409,18 @@ class TourGuide(Model):
             pass
 
     def getSkill(self, id):
-        return TourGuideSkill.select().where(TourGuideSkill.tourguide == id)
+        return (TourGuideSkill
+                .select()
+                .join(TourGuide,on=( TourGuideSkill.tourguide == id))
+                .where(TourGuide.id == id)
+                )
 
     def getPlace(self, id):
-        return TourGuidePlace.select().where(TourGuidePlace.tourguide == id)
+        return (TourGuidePlace
+                .select()
+                .join(TourGuide,on=(TourGuidePlace.tourguide == id) )
+                .where(TourGuide.id == id)
+                )
 
 
 class TourGuideSkill(Model):
@@ -434,7 +436,7 @@ class TourGuideSkill(Model):
 class TourGuidePlace(Model):
     """The Model is a relationship between tourguide and the Place """
 
-    tourguide = ForeignKeyField(TourGuide, backref='tguide',unique=True)
+    tourguide = ForeignKeyField(TourGuide, backref='tguide')
     place = ForeignKeyField(Place, backref='place')
 
     class Meta:
@@ -453,13 +455,17 @@ class TourInfo(Model):
     email = CharField()
     age = CharField()
     gender = CharField()
-    place = ForeignKeyField(Place, backref='places')
+    place = ForeignKeyField(Place, backref='places',
+                    on_delete='CASCADE',on_update='CASCADE')
     people = IntegerField()
     days = IntegerField()
     startdate = DateTimeField()
-    tourguide = ForeignKeyField(TourGuide, backref='tourguide')
+    tourguide = ForeignKeyField(TourGuide, backref='tourguide',
+                    on_delete='CASCADE',on_update='CASCADE')
     is_paid = BooleanField(default=False)
+    is_active = BooleanField(default=True)
     book_date = DateTimeField(default=datetime.datetime.now)
+
 
     class Meta:
         database = DB
@@ -494,6 +500,18 @@ class TourInfo(Model):
                     self.update(is_paid=True).where(self.id == id).execute()
         except Exception:
             pass
+    
+    @classmethod
+    def deativate(self, id):
+        new = self.get(self.id == id)
+        try:
+            with DB.transaction():
+                if new.is_active == True:
+                    self.update(is_active=False).where(self.id == id).execute()
+                else:
+                    self.update(is_active=True).where(self.id == id).execute()
+        except Exception:
+            pass
 
 
 class BookedRoom(Model):
@@ -507,9 +525,9 @@ class BookedRoom(Model):
     days = IntegerField(default=1)
     room = ForeignKeyField(Room, backref='reservedroom')
     reserved = IntegerField()
-    hotel = ForeignKeyField(Hotel, backref='hotel')
+    hotel = ForeignKeyField(Hotel, backref='hotel',
+                    on_delete='CASCADE',on_update='CASCADE')
     is_paid = BooleanField(default=False)
-    still_booked = BooleanField(default=True)
     booked_at = DateTimeField(default=datetime.datetime.now)
 
     class Meta:
@@ -543,15 +561,6 @@ class BookedRoom(Model):
         except Exception:
             pass
 
-    @classmethod
-    def unbookit(self, id):
-        try:
-            with DB.transaction():
-                self.update(still_booked=False).where(self.id == id).execute()
-        except Exception as e:
-            pass
-
-
 
 class PaymentSystem(Model):
     """
@@ -560,7 +569,8 @@ class PaymentSystem(Model):
 		-if the hotel field value is gt 1 the payment account is for th hotel with id
 			value given in the field.
     """
-    hotel = ForeignKeyField(Hotel, related_name='hotel', backref='hotel',default=0)
+    hotel = ForeignKeyField(Hotel, backref='hotel',default=0,
+                    on_delete='CASCADE',on_update='CASCADE')
     system_name = CharField(max_length=255)
     act_name = CharField(max_length=255)
     act_number = CharField(max_length=255)
@@ -584,13 +594,17 @@ class PaymentList(Model):
     acount_number = CharField(max_length=255)
     reason = CharField(max_length=255)
     price = IntegerField()
-    paymentoption = ForeignKeyField(PaymentSystem, backref='option')
+    paymentoption = ForeignKeyField(PaymentSystem, backref='option',
+                    on_delete='CASCADE',on_update='CASCADE')
     tourpayment = ForeignKeyField(
-        TourInfo, backref='tourinfo', default=0, null=True)
+        TourInfo, backref='tourinfo', default=0, null=True,
+                    on_delete='CASCADE',on_update='CASCADE')
     packagepayment = ForeignKeyField(
-        PurchasedPackage, backref='purchasedpackage', default=0, null=True)
+        PurchasedPackage, backref='purchasedpackage', default=0, null=True,
+                    on_delete='CASCADE',on_update='CASCADE')
     roomspayment = ForeignKeyField(
-        BookedRoom, backref='bookedrooms', default=0, null=True)
+        BookedRoom, backref='bookedrooms', default=0, null=True,
+                    on_delete='CASCADE',on_update='CASCADE')
 
     class Meta:
         database = DB
@@ -732,15 +746,3 @@ def init_All():
                     	TourGuidePlace, TourGuideSkill,
                     	PaymentSystem, PaymentList, Asset], safe=True)
     DB.close()
-
-# if __name__ == '__main__':
-# 	DB.connect()
-# 	# DB.create_tables([Package],safe=True)
-# 	PaymentSystem.create(
-# 		name = 'YenePay',
-# 		actname='TTGS-YenePay',
-# 		actnumber='YP1987654321'
-# 	)
-    # Skill.create(skill_name = input('Enter lang name:').strip())
-    # myp	= Place.select().where(Place.name=='barbara').get()
-    # print(Place.select().where(Place.name=='barbara').get().reg_time)
